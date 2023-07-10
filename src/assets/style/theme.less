@@ -1,0 +1,109 @@
+@import './variable.less';
+
+.header {
+    background-color: @primary-color;
+    color: @header-color;
+}
+
+a {
+    color: @primary-color-65;
+
+    &:hover {
+        color: @primary-color;
+    }
+}
+
+.main {
+
+    blockquote {
+        border-left: 3px solid @primary-color;
+        background-color: @blockquote-bg-color;
+    }
+
+    pre {
+        background-color: @pre-bg-color;
+    }
+
+    strong {
+        background-color: @strong-bg-color;
+        color: @white-color;
+    }
+
+    em {
+        color: @important-color;
+    }
+}
+
+.navigation {
+    li {
+        height: 20px;
+        line-height: 20px;
+    }
+}
+
+.router-link-active.router-link-exact-active {
+    color: @important-color!important;
+}
+
+
+.home-animate-box {
+    a {
+        color: transparent;
+        background:
+            repeating-linear-gradient(-45deg,
+                transparent,
+                transparent 25%,
+                @primary-color-85 0,
+                @primary-color-85 50%),
+            repeating-linear-gradient(45deg,
+                transparent,
+                transparent 25%,
+                @primary-color-65 0,
+                @primary-color-65 50%) @primary-color-25;
+        background-size: 50px 50px;
+        background-blend-mode: multiply; // 正片叠底效果
+        background-clip: text;
+        border: 20px solid;
+        border-image-source:
+            repeating-linear-gradient(-45deg,
+                @primary-color-25 0,
+                @primary-color-25 15px,
+                transparent 15px,
+                transparent 30px,
+                @primary-color-65 30px,
+                @primary-color-65 45px,
+                transparent 45px,
+                transparent 60px);
+        border-image-slice: 20;
+
+        &:hover {
+            color: transparent;
+            background:
+                repeating-linear-gradient(-35deg,
+                    transparent,
+                    transparent 25%,
+                    @primary-color-85 0,
+                    @primary-color-85 50%),
+                repeating-linear-gradient(35deg,
+                    transparent,
+                    transparent 25%,
+                    @primary-color-65 0,
+                    @primary-color-65 50%) @primary-color-65;
+            background-size: 50px 50px;
+            background-blend-mode: multiply; // 正片叠底效果
+            background-clip: text;
+            border: 20px solid;
+            border-image-source:
+                repeating-linear-gradient(-45deg,
+                    @primary-color-85 0,
+                    @primary-color-85 15px,
+                    transparent 15px,
+                    transparent 30px,
+                    @primary-color 30px,
+                    @primary-color 45px,
+                    transparent 45px,
+                    transparent 60px);
+            border-image-slice: 20;
+        }
+    }
+}
