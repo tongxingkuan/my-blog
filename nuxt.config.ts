@@ -3,12 +3,16 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   modules: ['@nuxt/content'],
   content: {
-    // markdown: {
-    //   anchorLinks: {
-    //     depth: 0,
-    //     exclude: [1, 2, 3, 4, 5, 6],
-    //   }
-    // },
+    markdown: {
+      toc: {
+        depth: 5,
+        searchDepth: 5,
+      },
+      anchorLinks: {
+        depth: 5,
+        exclude: [1]
+      },
+    },
     highlight: {
       preload: [
         'javascript',
@@ -17,9 +21,11 @@ export default defineNuxtConfig({
         'css',
         'less',
         'json',
-        'git-commit'
+        'cmd',
+        'jsx',
+        'tsx'
       ]
-    }
+    },
   },
   css: [
     '@/assets/style/normalize.less',

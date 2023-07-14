@@ -1,109 +1,150 @@
-@import './variable.less';
+@import "./variable.less";
+
+body {
+  color: @font-color;
+}
 
 .header {
-    background-color: @primary-color;
-    color: @header-color;
+  background-color: @primary-color;
+  color: @header-color;
+
+  .gs-container {
+    .gs-container-search-no-data {
+      color: @black-color-85;
+      background-color: @global-search-bg-color;
+      box-shadow: inset 1px 1px 0 0 @global-search-boxshadow-color1, 0 3px 8px 0 @global-search-boxshadow-color2;
+    }
+    .gs-container-search-list {
+        color: @black-color-85;
+        background-color: @global-search-bg-color;
+        box-shadow: inset 1px 1px 0 0 @global-search-boxshadow-color1, 0 3px 8px 0 @global-search-boxshadow-color2;
+
+        .gs-container-search-list-item {
+            background-color: @white-color;
+        }
+    }
+  }
 }
 
 a {
-    color: @primary-color-65;
+  color: @link-color;
 
-    &:hover {
-        color: @primary-color;
-    }
+  &:hover {
+    color: @primary-color;
+  }
 }
 
 .main {
+  blockquote {
+    border-left: 3px solid @primary-color;
+    background-color: @blockquote-bg-color;
+  }
 
-    blockquote {
-        border-left: 3px solid @primary-color;
-        background-color: @blockquote-bg-color;
-    }
+  pre {
+    background-color: @pre-bg-color;
+  }
 
-    pre {
-        background-color: @pre-bg-color;
-    }
+  p > code,
+  li > code {
+    background-color: @p-code-bg-color;
+  }
 
-    strong {
-        background-color: @strong-bg-color;
-        color: @white-color;
-    }
+  strong {
+    background-color: @strong-bg-color;
+    color: @white-color;
+  }
 
-    em {
-        color: @important-color;
-    }
+  em {
+    color: @important-color;
+  }
 }
 
-.navigation {
-    li {
-        height: 20px;
-        line-height: 20px;
-    }
+.aside-right .navigation .subnavigation li a {
+  border: none;
 }
 
-.router-link-active.router-link-exact-active {
-    color: @important-color!important;
+.aside-left .navigation .subnavigation li a {
+  border-color: @navigation-default-border-color;
 }
 
+.aside-left
+  .navigation
+  .subnavigation
+  li
+  a.router-link-active.router-link-exact-active,
+.aside-right .navigation li.active-hash > a {
+  color: @router-link-active-color!important;
+  border-color: @navigation-active-border-color;
+}
 
 .home-animate-box {
-    a {
-        color: transparent;
-        background:
-            repeating-linear-gradient(-45deg,
-                transparent,
-                transparent 25%,
-                @primary-color-85 0,
-                @primary-color-85 50%),
-            repeating-linear-gradient(45deg,
-                transparent,
-                transparent 25%,
-                @primary-color-65 0,
-                @primary-color-65 50%) @primary-color-25;
-        background-size: 50px 50px;
-        background-blend-mode: multiply; // 正片叠底效果
-        background-clip: text;
-        border: 20px solid;
-        border-image-source:
-            repeating-linear-gradient(-45deg,
-                @primary-color-25 0,
-                @primary-color-25 15px,
-                transparent 15px,
-                transparent 30px,
-                @primary-color-65 30px,
-                @primary-color-65 45px,
-                transparent 45px,
-                transparent 60px);
-        border-image-slice: 20;
+  a {
+    color: transparent;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 25%,
+        @primary-color-85 0,
+        @primary-color-85 50%
+      ),
+      repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 25%,
+          @primary-color-65 0,
+          @primary-color-65 50%
+        )
+        @primary-color-25;
+    background-size: 50px 50px;
+    background-blend-mode: multiply; // 正片叠底效果
+    background-clip: text;
+    border: 20px solid;
+    border-image-source: repeating-linear-gradient(
+      -45deg,
+      @primary-color-25 0,
+      @primary-color-25 15px,
+      transparent 15px,
+      transparent 30px,
+      @primary-color-65 30px,
+      @primary-color-65 45px,
+      transparent 45px,
+      transparent 60px
+    );
+    border-image-slice: 20;
 
-        &:hover {
-            color: transparent;
-            background:
-                repeating-linear-gradient(-35deg,
-                    transparent,
-                    transparent 25%,
-                    @primary-color-85 0,
-                    @primary-color-85 50%),
-                repeating-linear-gradient(35deg,
-                    transparent,
-                    transparent 25%,
-                    @primary-color-65 0,
-                    @primary-color-65 50%) @primary-color-65;
-            background-size: 50px 50px;
-            background-blend-mode: multiply; // 正片叠底效果
-            background-clip: text;
-            border: 20px solid;
-            border-image-source:
-                repeating-linear-gradient(-45deg,
-                    @primary-color-85 0,
-                    @primary-color-85 15px,
-                    transparent 15px,
-                    transparent 30px,
-                    @primary-color 30px,
-                    @primary-color 45px,
-                    transparent 45px,
-                    transparent 60px);
-            border-image-slice: 20;
-        }
+    &:hover {
+      color: transparent;
+      background: repeating-linear-gradient(
+          -35deg,
+          transparent,
+          transparent 25%,
+          @primary-color-85 0,
+          @primary-color-85 50%
+        ),
+        repeating-linear-gradient(
+            35deg,
+            transparent,
+            transparent 25%,
+            @primary-color-65 0,
+            @primary-color-65 50%
+          )
+          @primary-color-65;
+      background-size: 50px 50px;
+      background-blend-mode: multiply; // 正片叠底效果
+      background-clip: text;
+      border: 20px solid;
+      border-image-source: repeating-linear-gradient(
+        -45deg,
+        @primary-color-85 0,
+        @primary-color-85 15px,
+        transparent 15px,
+        transparent 30px,
+        @primary-color 30px,
+        @primary-color 45px,
+        transparent 45px,
+        transparent 60px
+      );
+      border-image-slice: 20;
     }
+  }
 }
