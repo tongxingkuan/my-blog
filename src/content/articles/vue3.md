@@ -455,7 +455,9 @@ $ mkdir packages/vue/examples/test.html
 
 ![callStack](/img/callStack.png)
 
-:c-text{text=调用栈 dir=center}
+::c-text{dir=center}
+调用栈
+::
 
 ##### 4. 浏览器扩展
 
@@ -625,7 +627,9 @@ mount(
 }
 ```
 
-:c-text{text=以下简称第一层mount dir=center}
+::c-text{dir=center}
+以下简称第一层mount
+::
 
 ```typescript
 // packages\runtime-dom\src\index.ts createApp
@@ -661,7 +665,9 @@ app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
 };
 ```
 
-:c-text{text=以下简称第二层mount dir=center}
+::c-text{dir=center}
+以下简称第二层mount
+::
 
 如果你认为 **createApp({}).mount('#app')** 方法就是执行第一层 mount 方法，那就错了，其实在 _packages\runtime-dom\src\index.ts_ createaApp 方法中，还有第二层 mount。首先巧妙的提取出了实例对象上的第一层 mount 方法，之后通过 app.mount 重写了 mount 方法，并在第二层 mount 方法中又调用了第一层 mount 方法。这种巧妙的书写方法可以让我们在调用第一层 mount 方法以前，对参数进行处理，或者是根据不同的场景差异化参数，类似“重载”的实现方式。之所以“重载”mount是为了实现跨平台。其实如果进行浏览器调试进行断点跟踪，也能发现上述问题，因为 test.html 中 mount 的参数为 _#app_ ，而实际在 mount 断点处，发现参数已经变为 DOM 元素，也就是说在这两者之间一定还有其他操作将选择器转换为了对应的 DOM 元素。
 
@@ -680,7 +686,9 @@ if (!isMounted) {
 命中断点以后，我们可以在 **callStack** 中查看调用链，因此也就知道了 **mount** 方法的上一个调用是在 **app.mount** 中。
 ![callStack](/img/callStack.png)
 
-:c-text{text=调用栈 dir=center}
+::c-text{dir=center}
+调用栈
+::
 
 接下来我们继续往下走，单步调试快捷键 **F10** ，进入方法快捷键 **F11** ，我们注意到以下代码：
 
@@ -698,7 +706,9 @@ const vnode = createVNode(rootComponent, rootProps);
 
 ![type](/img/type.png)
 
-:c-text{text=查看type值 dir=center}
+::c-text{dir=center}
+查看type值
+::
 
 最终通过**createBaseVNode**方法创建并返回 vnode。
 
@@ -1828,5 +1838,7 @@ const mountElement = (
 
 ![callStack2](/img/callStack2.png)
 
-:c-text{text=初始化流程调用栈 dir=center}
+::c-text{dir=center}
+初始化流程调用栈
+::
 

@@ -23,6 +23,12 @@ const articles = [
     tag: 'vue3、vue',
     desc: 'vue3语法介绍'
   },
+  {
+    name: '浏览器缓存',
+    path: 'articles/storage',
+    tag: 'cookie、sessionStorage、localStorage',
+    desc: '分析cookie、sessionStorage、localStorage的特点，使用场景'
+  },
 ];
 
 const find = (pageSize, pageNum, tag, name) => {

@@ -72,7 +72,7 @@ export default defineNuxtConfig({
 })
 ```
 
-### 组件
+### components
 
 #### 内置组件
 
@@ -223,10 +223,309 @@ const show = () => {
 }
 </style>
 ```
+
+内置组件就介绍这么多，更多内置组件可以去查阅 :c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。
+
 #### 自定义组件
 
-### 问题：
-1. 按照nuxt/content的 :c-link{name=引导 href=https://content.nuxtjs.org/examples/mdc/props target=blank} ，设置nuxt.config.ts以后，部分组件无法正常使用
+在开发过程中，肯定会遇到一些内置组件无法满足的需求。
+
+##### 需求
+
+需要在markdown中加入一个可以在新窗口打开的链接
+
+##### 分析
+
+如果是在html页面，只需要一个`a标签`，`target`属性设置为`_blank`即可。
+在markdown中，原生语法不支持新窗口打开功能，因此需要采用content自定义组件的方式实现。
+
+##### 用法
+
+在`components`目录下新建子目录`content`，在该目录下声明的组件可以直接在markdown文档中使用，声明一个组件文件`CLink`。但其实，nuxt3中，components组件中的所有组件都已被声明为全局组件，所以只要是components目录下的所有组件均可在markdown文件中引入。`CLink.vue`代码如下：
+
+```vue
+<template>
+  <a :href="href" :target="'_' + target">{{ name }}</a>
+</template>
+<script setup>
+defineProps({
+  name: {
+    type: String,
+    default: ''
+  },
+  href: {
+    type: String,
+    default: '#'
+  },
+  target: {
+    type: String,
+    default: 'self'
+  }
+})
+</script>
+```
+
+要想在markdown中引入，其语法如下：
+
+###### 单行组件
+
+单行组件以冒号（:）开头，组件名称可以用大写或者中横线（-）分隔，参数以花括号（{}）包裹，多个参数用空格分开
+
+```markdown
+:c-link{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+
+:CLink{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+```
+
+###### 嵌套组件
+
+嵌套组件以双冒号（::）开头，中间包裹嵌套其他组件
+
+```markdown
+::c-slot
+  ::c-nested
+  This content comes from a nested MDC component in markdown.
+  ::
+::
+```
+
+###### 组件插槽
+
+```vue
+<template>
+  <div>
+    <p style="border: 1px solid; padding: .5rem">
+      <!-- 默认插槽 -->
+      <slot></slot>
+    </p>
+    <hr />
+    <!-- 具名插槽 -->
+    <slot name="namedSlot"></slot>
+  </div>
+</template>
+```
+
+```md
+::c-slot
+Rendered in the default slot of the `AppSlot` component from markdown
+
+#namedSlot 
+Content inside the `namedSlot` slot
+::
+```
+
+::c-slot
+Rendered in the default slot of the `AppSlot` component from markdown
+
+#namedSlot 
+Content inside the `namedSlot` slot
+::
+
+### composables
+
+包含封装过的可复用的api。
+
+#### queryContent
+
+在contents目录下查询并获取匹配的内容。
+
+##### where(opts)
+
+过滤查询条件。采用Mongo查询语法：
+- `$eq`：等于
+- `$gt`：大于
+- `$gte`: 大于等于
+- `$lt`：小于
+- `$lte`：小于等于
+- `$in`：包含于
+
+```typescript
+// Implicit (assumes $eq operator)
+const articles = await queryContent('articles').where({ title: 'Home' }).findOne()
+
+// Explicit $eq
+const articles = await queryContent('articles').where({ title: { $eq: 'Home' } }).findOne()
+
+// $gt
+const articles = await queryContent('articles').where({ age: { $gt: 18 } }).find()
+
+// $in
+const articles = await queryContent('articles').where({ name: { $in: ['odin', 'thor'] } }).find()
+```
+
+##### sort(opts)
+
+排序：默认大小写敏感字典顺序排序，可选参数有：
+
+- `$sensitivity`：值为 `base` 则不区分大小写排序
+- `$numeric`：是否按照数字大小排序
+- `$caseFirst`：大小写优先排序
+
+##### limit(N: number)
+
+限制展示N个
+
+##### skip(N: number)
+
+跳过N个
+
+##### without(key: string | Array)
+
+满足的不留下
+
+##### only(key: string | Array)
+
+满足的留下
+##### find()
+
+查询多个
+##### findOne()
+
+查询一个
+
+#### fetchContentNavigation
+
+获取content路由导航
+##### 用法
+
+获取路由（树结构）
+
+```typescript
+// fetchContentNavigation 根据content目录结构生成路由，用queryContent限定想要的目录
+const { data: navigation } = await useAsyncData("cNavigation", () => {
+  return fetchContentNavigation(queryContent('articles'));
+});
+```
+
+```vue
+<contentNavigation :navigation-tree="navigation"></contentNavigation>
+```
+渲染路由（树结构）
+
+```vue
+<template>
+  <ul class="navigation">
+    <li v-for="(item, index) in navigationTree" :key="index" :title="item.title">
+      <NuxtLink :to="item._path">
+        {{ item.title }}
+      </NuxtLink>
+      <contentNavigation
+        v-if="item.children"
+        :navigation-tree="item.children"
+        class="subnavigation"
+      />
+    </li>
+  </ul>
+</template>
+
+<script setup>
+defineProps({
+  navigationTree: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+</script>
+```
+
+##### 参数
+
+- `QueryBuilder`：`queryContent()`的返回值，用于过滤输出目录
+
+
+### 自动生成
+
+至此，介绍完了nuxt/content的使用方式，它有很多自动生成的特性：
+1. 根据content目录自动生成导航菜单
+2. 根据content目录自动生成页面结构
+3. 根据markdown文档自动生成锚节点导航
+4. 自带api获取以及过滤内容，速度快性能高
+5. 自动实现代码高亮效果
+
+#### 案例
+
+##### 根据markdown文档自动生成锚节点导航
+
+首先定义文档query字段用于查询条件过滤：
+
+```md
+---
+title: "vue3源码解读"
+description: "本文将从入口文件到打包配置，浏览器调试等一系列方面展开解读vue3源码"
+query: "vue3"
+---
+```
+
+然后根据页面参数获取到对应文档：
+
+```typescript
+// 通过查询query项匹配路由参数slug，页面由md文档自动生成，此处的slug对应就是页面对应的md文档名称，也就是页面所属的子路由
+if (route.params.slug && route.params.slug.length > 0) {
+  const articles = await queryContent('articles').where({ query: { $eq: route.params.slug[0] } }).find();
+  if (articles && articles.length > 0) {
+    aNavigation.value = articles[0].body.toc.links;
+  } else {
+    aNavigation.value = [];
+  }
+}
+```
+
+监听路由变化，并重新查询文档、生成锚点导航：
+
+```typescript
+watch(route, async ({ params }) => {
+  // 访问pages/index不会有slug，所以判断
+  if (params.slug) {
+    // 查询articles目录下md文件中用"---"包裹的文件说明，其中route说明等于当前路由slug
+    const articles = await queryContent('articles').where({ query: { $eq: params.slug[0] } }).find();
+    if (articles && articles.length > 0) {
+      aNavigation.value = articles[0].body.toc.links;
+    } else {
+      aNavigation.value = [];
+    }
+  }
+})
+```
+
+展示路由、高亮当前路由：
+
+```vue
+<template>
+  <ul class="navigation">
+    <li v-for="(item, index) in navigationTree" :key="index" :title="item.text" :class="(currentHash === '#' + item.id) ? 'active-hash' : ''">
+      <a :href="'#' + item.id">{{ item.text }}</a>
+      <anchorNavigation
+        v-if="item.children"
+        :navigation-tree="item.children"
+        class="subnavigation"
+      />
+    </li>
+  </ul>
+</template>
+
+<script setup>
+defineProps({
+  navigationTree: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const route = useRoute()
+const currentHash = ref(route.hash)
+watch(route, (newRoute) => {
+  currentHash.value = newRoute.hash
+});
+
+</script>
+```
+
+### 项目开发问题
+
+#### 组件配置问题
+
+:c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/mdc/props target=blank} 有如下配置，设置如下nuxt.config.ts以后，部分组件无法正常使用
 
 ```javascript
 components: {
@@ -235,9 +534,81 @@ components: {
 }
 ```
 
-这是默认配置，默认components文件夹中的组件都设置的全局，如果加上这个属性，那就是部分全局，剩下的都不再作为全局组件，所以产生了问题。
-解决方法：去掉该条配置项即可
+nuxt3项目中，默认components文件夹中的组件是全局，如果加上这个属性，那就是部分全局，剩下的都不再作为全局组件，所以产生了问题。
 
-2. 组件嵌套问题
+`解决方法`：去掉该条配置项即可
 
-比如我想在一个组件A中引入另一个组件B，并将组件B作为组件A某一个属性值的一部分，此时该如何编写md。
+#### 组件嵌套问题
+
+比如我现在有一个组件用于生成在新窗口打开的链接，有另一个组件是用于居中展示文字，我现在希望居中展示可以在新窗口打开的链接
+
+它们各自应用代码见下：
+
+```md
+:c-link{name=引导 href=# target=blank}
+```
+
+```md
+:c-text{text=引导 dir=center}
+```
+
+那么我们按照[组件插槽](#组件插槽)的方式，改写CText.vue代码
+
+改写前：
+
+```vue
+<template>
+  <p :style="{ 'text-align': dir }">
+    {{ text }}
+  </p>
+</template>
+<script setup>
+defineProps({
+  text: {
+    type: String,
+    default: ''
+  },
+  dir: {
+    type: String,
+    default: 'left'
+  },
+})
+</script>
+```
+
+改写后：
+
+```vue
+<template>
+  <p :style="{ 'text-align': dir }">
+    <slot></slot>
+  </p>
+</template>
+<script setup>
+defineProps({
+  dir: {
+    type: String,
+    default: 'left'
+  },
+})
+</script>
+```
+
+引入：
+
+```md
+::c-text{dir=center}
+  :c-link{name=引导 href=# target=blank}
+::
+```
+
+效果展示
+
+::c-text{dir=center}
+  ::c-link{href=# target=blank}
+  引导
+  ::
+::
+
+
+
