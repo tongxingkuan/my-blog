@@ -208,6 +208,9 @@ select:-webkit-autofill {
     margin: 1.2rem 0;
     line-height: 1.2rem;
     text-indent: 2rem;
+    & ~ p, & ~ ul, & ~ ol {
+      padding-left: 2rem;
+    }
   }
 
   h5 {
@@ -215,6 +218,9 @@ select:-webkit-autofill {
     margin: 1rem 0;
     line-height: 1rem;
     text-indent: 4rem;
+    & ~ p, & ~ ul, & ~ ol {
+      padding-left: 4rem;
+    }
   }
 
   h6 {
@@ -222,6 +228,9 @@ select:-webkit-autofill {
     margin: 0.8rem 0;
     line-height: 0.8rem;
     text-indent: 6rem;
+    & ~ p, & ~ ul, & ~ ol {
+      padding-left: 6rem;
+    }
   }
 
   strong {
@@ -245,10 +254,14 @@ select:-webkit-autofill {
     padding-bottom: 10px;
   }
 
-  pre {
+  code {
     font-family: Source Code Pro, DejaVu Sans Mono, Ubuntu Mono, Anonymous Pro,
       Droid Sans Mono, Menlo, Monaco, Consolas, Inconsolata, Courier, monospace,
       PingFang SC, Microsoft YaHei, sans-serif;
+  }
+
+  pre {
+    position: relative;
     padding: 8px 16px 6px 16px;
     line-height: 22px;
     overflow: auto;
@@ -263,13 +276,22 @@ select:-webkit-autofill {
 
   img {
     display: block;
-    margin: 10px auto;
+    margin: 20px auto;
+  }
+
+  ul {
+    padding: 20px;
+    li {
+      list-style: square;
+      margin: 0.5rem 0;
+    }
   }
 
   ol {
     padding: 20px;
     li {
       list-style: decimal;
+      margin: 0.5rem 0;
     }
   }
 }

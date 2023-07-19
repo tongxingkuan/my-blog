@@ -1,5 +1,6 @@
 <template>
   <p :style="{ 'text-align': dir }">
+    {{ text }}
     <slot></slot>
   </p>
 </template>
@@ -9,5 +10,9 @@ defineProps({
     type: String,
     default: 'left'
   },
+  text: {
+    type: String,
+    default: ''
+  }
 })
 </script>

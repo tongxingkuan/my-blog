@@ -15,6 +15,7 @@
     "nuxt": "^3.5.2"
   },
   "dependencies": {
+    "clipboard": "^2.0.11",
     "element-plus": "^2.3.7",
     "less": "^4.1.3",
     "less-loader": "^11.1.3",

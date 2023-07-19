@@ -10,7 +10,7 @@ const hide = () => {
   setTimeout(() => {
     // 避免影响跳转，先跳转后隐藏
     flag.value = false;
-  }, 1000)
+  }, 500)
 }
 const show = () => {
   flag.value = true;
@@ -33,8 +33,8 @@ const show = () => {
           </el-scrollbar>
         </ul>
       </template>
-      <template #not-found v-if="flag">
-        <p class="gs-container-search-no-data" v-if="queryStr">没有找到相关资源</p>
+      <template #not-found v-if="flag && queryStr">
+        <p class="gs-container-search-no-data">没有找到相关资源</p>
       </template>
     </ContentList>
   </div>
@@ -47,6 +47,10 @@ const show = () => {
   margin-right: 20px;
   line-height: 50px;
   position: relative;
+
+  pre {
+    display: none;
+  }
 
   .gs-container-search {
     width: auto;

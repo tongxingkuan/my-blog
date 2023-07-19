@@ -42,6 +42,15 @@ a {
 
   pre {
     background-color: @pre-bg-color;
+
+    .copy-btn {
+      background-color: @copy-btn-bg-color;
+    }
+    
+    &:hover .copy-btn {
+      opacity: 0.6;
+      background-color: @copy-btn-bg-hover-color;
+    }
   }
 
   p > code,

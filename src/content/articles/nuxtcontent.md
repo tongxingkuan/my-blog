@@ -20,6 +20,7 @@ query: 'nuxtcontent'
 2. 基于文件的内容管理系统，根据文件目录自动生成web页面、导航，同时还提供根据匹配内容快速查找文档的功能。
 3. MDC语法支持-即 **Markdown Component** 。使得常规`Markdown`能够支持`vue`组件的引入。
 4. 支持代码高亮。
+5. 生成meta标签，利于SEO。
 
 综合上述特点，本博客引入`content`，运用到了其内容管理，导航，锚点导航，源码展示等特点。
 
@@ -383,6 +384,115 @@ const articles = await queryContent('articles').where({ name: { $in: ['odin', 't
 
 查询一个
 
+##### 全局查找
+
+本博客采用的全局查找就是通过构建一个 **query: QueryBuilderParams** ，然后通过组件`<ContentList :query='query'></ContentList>`查找获取文章，文章用于查询的信息是在md文件中通过`---`语法声明的。
+
+```vue
+<script setup lang="ts">
+import type { QueryBuilderParams } from '@nuxt/content/dist/runtime/types'
+const queryStr = ref('');
+// 构建一个查询条件，此处是必须输入和文档定义的query字段相等
+const query = ref<QueryBuilderParams>({ path: '/articles', where: [{ query: { $eq: queryStr.value.toLocaleLowerCase() } }] })
+watch(queryStr, (newQuery) => {
+  query.value = { path: '/articles', where: [{ query: { $eq: newQuery.toLocaleLowerCase() } }] }
+})
+const flag = ref(true);
+const hide = () => {
+  setTimeout(() => {
+    // 避免影响跳转，先跳转后隐藏
+    flag.value = false;
+  }, 500)
+}
+const show = () => {
+  flag.value = true;
+}
+</script>
+
+<template>
+  <div class="gs-container">
+    全局搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show"></el-input>
+    <ContentList :query="query">
+      <template #default="{ list }">
+        <ul class="gs-container-search-list" v-if="flag">
+          <el-scrollbar style="max-height: 250px">
+            <li v-for="article in list" :key="article._path" class="gs-container-search-list-item">
+              <NuxtLink :to="article._path">
+                <div class="title">{{ article.title }}</div>
+                <div class="desc">{{ article.description }}</div>
+              </NuxtLink>
+            </li>
+          </el-scrollbar>
+        </ul>
+      </template>
+      <template #not-found v-if="flag && queryStr">
+        <p class="gs-container-search-no-data">没有找到相关资源</p>
+      </template>
+    </ContentList>
+  </div>
+</template>
+
+<style lang="less">
+.gs-container {
+  width: 300px;
+  height: 100%;
+  margin-right: 20px;
+  line-height: 50px;
+  position: relative;
+
+  pre {
+    display: none;
+  }
+
+  .gs-container-search {
+    width: auto;
+  }
+
+  .gs-container-search-list {
+    position: absolute;
+    width: 300px;
+    max-height: 250px;
+    border-radius: 6px;
+    padding: 20px;
+    z-index: 10;
+
+    .gs-container-search-list-item {
+      width: 100%;
+      height: 50px;
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 5px;
+      display: flex;
+      line-height: 20px;
+      flex-direction: column;
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+        height: 20px;
+      }
+      .desc {
+        font-size: 14px;
+        width: 100%;
+        height: 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .gs-container-search-no-data {
+    width: 300px;
+    position: absolute;
+    text-align: center;
+    padding: 20px;
+    border-radius: 6px;
+    z-index: 10;
+  }
+}
+</style>
+```
+
 #### fetchContentNavigation
 
 获取content路由导航
@@ -442,6 +552,7 @@ defineProps({
 3. 根据markdown文档自动生成锚节点导航
 4. 自带api获取以及过滤内容，速度快性能高
 5. 自动实现代码高亮效果
+6. 生成meta标签，利于SEO。
 
 #### 案例
 

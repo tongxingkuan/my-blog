@@ -18,7 +18,7 @@ query: "vue3"
 
 要阅读项目源代码，特别是当项目目录较多，层次较深时，我们就要从入口文件入手，根据入口逐渐发散开来，期间要找准主线逻辑，切莫跑偏导致思绪混乱。现在的项目大多是基于 nodejs 开发，像这一类项目，找到 **package.json** 文件也就找到了项目的“身份证”。根据 **package.json** 的 scripts 中的指令，我们找到了 dev 指令所对应的文件路径及名称： **node scripts/dev.js** ，那么我们接下来就进入到该文件下一探究竟吧！
 
-> 当然 scripts 中的命令还有很多，且不是以 dev.js 作为入口，这个时候我们就要 **学会分清主线** ，何为主线，就是在不了解代码的前提下，先找准一个方向进行探究，期间的其他分支不要过分纠结，否则将会导致我们深陷支线，难以自拔，最终的结果就是放弃或从头再来。
+当然 scripts 中的命令还有很多，且不是以 dev.js 作为入口，这个时候我们就要 **学会分清主线** ，何为主线，就是在不了解代码的前提下，先找准一个方向进行探究，期间的其他分支不要过分纠结，否则将会导致我们深陷支线，难以自拔，最终的结果就是放弃或从头再来。
 
 #### scripts/build.js 文件解读
 
@@ -59,11 +59,12 @@ const pkg = require(`../packages/${target}/package.json`);
 我们知道现在主流的打包工具有：[webpack](/#)、[rollup](/#)、[grunt](/#)；此博客将分章节讲述各种打包工具，并对比各个打包工具的优劣，此处不过多赘述。通过代码根目录下的 **rollup.config.js** 我们知道 vue3 项目源码采用 **rollup** 进行打包。而熟悉 vue2 源码的小伙伴都知道，vue2 采用的 webpack 打包，那么为什么要放弃 webpack 打包工具，采用 rollup 呢？
 
 > 在 vue2 中，打包采用的是 webpack，而到了 vue3 中打包就变成了 rollup，而且不仅仅 vue3 采用了 rollup 来打包，react 也从 webpack 到 rollup 转变了。那么 rollup 打包工具是不是要比 webpack 打包要好呢？其实各自有各自的用途，我们通过对比 vue2 和 vue3 的一些用法就可以简单的看出来两者打包工具的一些区别，vue3 最大的一个特性就说采用了组合式 API，简单来说 vue2 更多的像一个百宝箱，我们可以开箱即用，而 vue3 更多的是提供一些基础功能，然后让使用者去选择，灵活使用。两者打包工具各自有各自的好处，就像一句话说的"webpack 是大而全，rollup 是小而美"。首先相对于 webpack 来说 rollup 更加轻量级，同时 rollup 是一个 JS 模块打包器，更适合于 JS 库打包，而 webpack 更适合的是大型项目。
+
 > 版权声明：本文为 CSDN 博主「BUG 不加糖」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。[原文链接](https://blog.csdn.net/YX0711/article/details/129202476)
 
 归结来说就是 rollup 更轻量，更契合 vue3 灵活性的特点。以上说明了一下 vue3 打包工具以及为什么采用 rollup 打包。
 
-> 但是其实这一小节说的 rollup 打包实际上并未在 dev 命令的后续中使用到，因为在 **scripts/dev.js** 有这么一段打包代码，对比 **scripts/build.js** 中的打包代码不难发现，运行 **yarn dev** 并不会采用 rollup 打包方式，而是采用的 **esbuild 打包方式** 。之所以在这里提到 rollup 是因为我们常用的还是 build 构建方式生成的包才是大多数脚手架工具采用的依赖包，而 dev 构建方式只是生成一个 **dist\vue.global.js** 文件，在现在的应用场景相对较少。
+但是其实这一小节说的 rollup 打包实际上并未在 dev 命令的后续中使用到，因为在 **scripts/dev.js** 有这么一段打包代码，对比 **scripts/build.js** 中的打包代码不难发现，运行 **yarn dev** 并不会采用 rollup 打包方式，而是采用的 **esbuild 打包方式** 。之所以在这里提到 rollup 是因为我们常用的还是 build 构建方式生成的包才是大多数脚手架工具采用的依赖包，而 dev 构建方式只是生成一个 **dist\vue.global.js** 文件，在现在的应用场景相对较少。
 
 ```javascript
 // dev.js
@@ -455,9 +456,7 @@ $ mkdir packages/vue/examples/test.html
 
 ![callStack](/img/callStack.png)
 
-::c-text{dir=center}
-调用栈
-::
+:c-text{dir=center text=调用栈}
 
 ##### 4. 浏览器扩展
 
@@ -627,9 +626,7 @@ mount(
 }
 ```
 
-::c-text{dir=center}
-以下简称第一层mount
-::
+:c-text{dir=center text=以下简称第一层mount}
 
 ```typescript
 // packages\runtime-dom\src\index.ts createApp
@@ -665,9 +662,7 @@ app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
 };
 ```
 
-::c-text{dir=center}
-以下简称第二层mount
-::
+:c-text{dir=center text=以下简称第二层mount}
 
 如果你认为 **createApp({}).mount('#app')** 方法就是执行第一层 mount 方法，那就错了，其实在 _packages\runtime-dom\src\index.ts_ createaApp 方法中，还有第二层 mount。首先巧妙的提取出了实例对象上的第一层 mount 方法，之后通过 app.mount 重写了 mount 方法，并在第二层 mount 方法中又调用了第一层 mount 方法。这种巧妙的书写方法可以让我们在调用第一层 mount 方法以前，对参数进行处理，或者是根据不同的场景差异化参数，类似“重载”的实现方式。之所以“重载”mount是为了实现跨平台。其实如果进行浏览器调试进行断点跟踪，也能发现上述问题，因为 test.html 中 mount 的参数为 _#app_ ，而实际在 mount 断点处，发现参数已经变为 DOM 元素，也就是说在这两者之间一定还有其他操作将选择器转换为了对应的 DOM 元素。
 
@@ -686,9 +681,7 @@ if (!isMounted) {
 命中断点以后，我们可以在 **callStack** 中查看调用链，因此也就知道了 **mount** 方法的上一个调用是在 **app.mount** 中。
 ![callStack](/img/callStack.png)
 
-::c-text{dir=center}
-调用栈
-::
+:c-text{dir=center text=调用栈}
 
 接下来我们继续往下走，单步调试快捷键 **F10** ，进入方法快捷键 **F11** ，我们注意到以下代码：
 
@@ -706,9 +699,7 @@ const vnode = createVNode(rootComponent, rootProps);
 
 ![type](/img/type.png)
 
-::c-text{dir=center}
-查看type值
-::
+:c-text{dir=center text=查看type值}
 
 最终通过**createBaseVNode**方法创建并返回 vnode。
 
@@ -1838,7 +1829,4 @@ const mountElement = (
 
 ![callStack2](/img/callStack2.png)
 
-::c-text{dir=center}
-初始化流程调用栈
-::
-
+:c-text{dir=center text=初始化流程调用栈}

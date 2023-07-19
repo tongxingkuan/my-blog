@@ -86,7 +86,7 @@ const computedRouteList = computed(() => {
 
 // fetchContentNavigation 根据content目录结构生成路由，用queryContent限定想要的目录
 const { data: cNavigation } = await useAsyncData("cNavigation", () => {
-  return fetchContentNavigation(queryContent('articles').sort({$numeric: true}));
+  return fetchContentNavigation(queryContent('articles').sort({}));
 });
 
 // 监听article子路由变化，并根据路由名找到对应的文章对象，body.toc.links是content生成，包含了markdown文档的锚点导航，depth参见配置项nuxt.config.ts。
