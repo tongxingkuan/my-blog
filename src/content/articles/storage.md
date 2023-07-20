@@ -1,7 +1,7 @@
 ---
 title: "浏览器缓存"
 description: "分析cookie、sessionStorage、localStorage的特点，使用场景"
-query: "storage"
+querys: ['缓存','cookie','sessionStorage','localStorage']
 ---
 
 ## cookie、sessionStorage、localStorage 的那些事儿

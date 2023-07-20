@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import type { QueryBuilderParams } from '@nuxt/content/dist/runtime/types'
-const queryStr = ref('');
-const query = ref<QueryBuilderParams>({ path: '/articles', where: [{ query: { $eq: queryStr.value.toLocaleLowerCase() } }] })
+const queryStr = ref<string>('')
+let query: QueryBuilderParams = ref<QueryBuilderParams>({})
+if (queryStr.value !== '') {
+  // 匹配querys数组
+  query.value = ref<QueryBuilderParams>({ path: '/articles', where: [{ querys: { $contains: queryStr.value.toLocaleLowerCase() } }] })
+}
 watch(queryStr, (newQuery) => {
-  query.value = { path: '/articles', where: [{ query: { $eq: newQuery.toLocaleLowerCase() } }] }
+  if (newQuery !== '') {
+  // 匹配querys数组
+    query.value = { path: '/articles', where: [{ querys: { $contains: newQuery.toLocaleLowerCase() } }] }
+  }
 })
 const flag = ref(true);
 const hide = () => {
@@ -22,8 +29,8 @@ const show = () => {
     全局搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show"></el-input>
     <ContentList :query="query">
       <template #default="{ list }">
-        <ul class="gs-container-search-list" v-if="flag">
-          <el-scrollbar style="max-height: 250px">
+        <ul class="gs-container-search-list" v-if="flag && queryStr !== ''">
+          <el-scrollbar style="max-height: 210px; overflow: scroll;">
             <li v-for="article in list" :key="article._path" class="gs-container-search-list-item">
               <NuxtLink :to="article._path">
                 <div class="title">{{ article.title }}</div>
@@ -33,7 +40,7 @@ const show = () => {
           </el-scrollbar>
         </ul>
       </template>
-      <template #not-found v-if="flag && queryStr">
+      <template #not-found v-if="flag">
         <p class="gs-container-search-no-data">没有找到相关资源</p>
       </template>
     </ContentList>

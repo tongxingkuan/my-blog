@@ -91,7 +91,7 @@ const { data: cNavigation } = await useAsyncData("cNavigation", () => {
 
 // 监听article子路由变化，并根据路由名找到对应的文章对象，body.toc.links是content生成，包含了markdown文档的锚点导航，depth参见配置项nuxt.config.ts。
 if (route.params.slug && route.params.slug.length > 0) {
-  const articles = await queryContent('articles').where({ query: { $eq: route.params.slug[0] } }).find();
+  const articles = await queryContent('articles/' + route.params.slug[0]).find();
   if (articles && articles.length > 0) {
     aNavigation.value = articles[0].body.toc.links;
   } else {
@@ -102,7 +102,7 @@ watch(route, async ({ params }) => {
   // 访问pages/index不会有slug，所以判断
   if (params.slug) {
     // 查询articles目录下md文件中用"---"包裹的文件说明，其中route说明等于当前路由slug
-    const articles = await queryContent('articles').where({ query: { $eq: params.slug[0] } }).find();
+    const articles = await queryContent('articles/' + route.params.slug[0]).find();
     if (articles && articles.length > 0) {
       aNavigation.value = articles[0].body.toc.links;
     } else {

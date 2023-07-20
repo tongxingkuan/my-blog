@@ -1,7 +1,7 @@
 ---
 title: "vue3项目开发"
 description: "vue3语法介绍"
-query: "vue3project"
+querys: ['vue','vue3']
 ---
 
 ## vue3项目开发

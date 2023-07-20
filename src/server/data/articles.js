@@ -29,6 +29,12 @@ const articles = [
     tag: 'cookie、sessionStorage、localStorage',
     desc: '分析cookie、sessionStorage、localStorage的特点，使用场景'
   },
+  {
+    name: '数据类型',
+    path: 'articles/datatype',
+    tag: '基本数据类型、引用数据类型',
+    desc: '介绍前端js中的数据类型：包括基本数据类型和引用数据类型'
+  },
 ];
 
 const find = (pageSize, pageNum, tag, name) => {

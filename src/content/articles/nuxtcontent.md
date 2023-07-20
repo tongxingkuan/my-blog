@@ -1,7 +1,7 @@
 ---
 title: 'nuxt/content'
 description: '从我的博客开发实践带领读者走近nuxt/content'
-query: 'nuxtcontent'
+querys: ['nuxt','content']
 ---
 
 ## nuxt/content
@@ -391,11 +391,17 @@ const articles = await queryContent('articles').where({ name: { $in: ['odin', 't
 ```vue
 <script setup lang="ts">
 import type { QueryBuilderParams } from '@nuxt/content/dist/runtime/types'
-const queryStr = ref('');
-// 构建一个查询条件，此处是必须输入和文档定义的query字段相等
-const query = ref<QueryBuilderParams>({ path: '/articles', where: [{ query: { $eq: queryStr.value.toLocaleLowerCase() } }] })
+const queryStr = ref<string>('')
+let query: QueryBuilderParams = ref<QueryBuilderParams>({})
+if (queryStr.value !== '') {
+  // 匹配querys数组
+  query.value = ref<QueryBuilderParams>({ path: '/articles', where: [{ querys: { $contains: queryStr.value.toLocaleLowerCase() } }] })
+}
 watch(queryStr, (newQuery) => {
-  query.value = { path: '/articles', where: [{ query: { $eq: newQuery.toLocaleLowerCase() } }] }
+  if (newQuery !== '') {
+  // 匹配querys数组
+    query.value = { path: '/articles', where: [{ querys: { $contains: newQuery.toLocaleLowerCase() } }] }
+  }
 })
 const flag = ref(true);
 const hide = () => {
@@ -415,7 +421,7 @@ const show = () => {
     <ContentList :query="query">
       <template #default="{ list }">
         <ul class="gs-container-search-list" v-if="flag">
-          <el-scrollbar style="max-height: 250px">
+          <el-scrollbar style="max-height: 210px; overflow: scroll;">
             <li v-for="article in list" :key="article._path" class="gs-container-search-list-item">
               <NuxtLink :to="article._path">
                 <div class="title">{{ article.title }}</div>
@@ -425,7 +431,7 @@ const show = () => {
           </el-scrollbar>
         </ul>
       </template>
-      <template #not-found v-if="flag && queryStr">
+      <template #not-found v-if="flag">
         <p class="gs-container-search-no-data">没有找到相关资源</p>
       </template>
     </ContentList>

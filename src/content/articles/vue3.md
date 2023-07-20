@@ -1,7 +1,7 @@
 ---
 title: "vue3源码解读"
 description: "本文将从入口文件到打包配置，浏览器调试等一系列方面展开解读vue3源码"
-query: "vue3"
+querys: ['vue', 'vue3']
 ---
 
 ## vue3 源码解读

@@ -1,7 +1,7 @@
 ---
 title: "vue2源码流程图"
 description: "vue2源码流程图"
-query: "vue2"
+querys: ['vue', 'vue2']
 ---
 
 ## vue2源码流程图
