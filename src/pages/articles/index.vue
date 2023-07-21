@@ -23,7 +23,8 @@
 declare interface article {
   name: string,
   path: string,
-  desc: string
+  desc: string,
+  tag: string
 }
 // 布局
 definePageMeta({
@@ -55,7 +56,7 @@ const getArticles = () => {
       [property]:  route.query.keywords
     },
   }).then(res => {
-    articlesRef.value = res.articles;
+    articlesRef.value = res.articles || [];
     totalRef.value = res.total;
   })
 }

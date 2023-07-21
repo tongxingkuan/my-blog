@@ -1,26 +1,26 @@
 ---
-title: 'nuxt/content'
-description: '从我的博客开发实践带领读者走近nuxt/content'
-querys: ['nuxt','content']
+title: "nuxt/content"
+description: "从我的博客开发实践带领读者走近nuxt/content"
+querys: ["nuxt", "content"]
 ---
 
 ## nuxt/content
 
 ### 相关文档
 
-**nuxt/content** v2版本是针对 **nuxt 3** 的一个模块库。引入nuxt/content后，可以参考 :c-link{name=nuxt3文档-模块 href=https://57code.gitee.io/nuxt3-docs-zh/directory-structure/nuxt-config.html#%E6%9E%84%E5%BB%BA%E6%9C%9F%E6%A8%A1%E5%9D%97-buildmodules target=blank} 添加配置。
+**nuxt/content** v2 版本是针对 **nuxt 3** 的一个模块库。引入 nuxt/content 后，可以参考 :c-link{name=nuxt3 文档-模块 href=https://57code.gitee.io/nuxt3-docs-zh/directory-structure/nuxt-config.html#%E6%9E%84%E5%BB%BA%E6%9C%9F%E6%A8%A1%E5%9D%97-buildmodules target=blank} 添加配置。
 
-本文章不是完整的nuxt/content文档，仅针对本项目中使用nuxt/content相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于nuxt/content（以下简称content）相关技术的讨论，如需了解本文对nuxt3的使用，请前往 [nuxt3](/articles/nuxt3)。
+本文章不是完整的 nuxt/content 文档，仅针对本项目中使用 nuxt/content 相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于 nuxt/content（以下简称 content）相关技术的讨论，如需了解本文对 nuxt3 的使用，请前往 [nuxt3](/articles/nuxt3)。
 
 ### 特点
 
-为什么要引入content或者说它有哪些特点呢？
+为什么要引入 content 或者说它有哪些特点呢？
 
 1. `content v2`作为`nuxt3`的模块库，能友好支持`nuxt3`。
-2. 基于文件的内容管理系统，根据文件目录自动生成web页面、导航，同时还提供根据匹配内容快速查找文档的功能。
-3. MDC语法支持-即 **Markdown Component** 。使得常规`Markdown`能够支持`vue`组件的引入。
+2. 基于文件的内容管理系统，根据文件目录自动生成 web 页面、导航，同时还提供根据匹配内容快速查找文档的功能。
+3. MDC 语法支持-即 **Markdown Component** 。使得常规`Markdown`能够支持`vue`组件的引入。
 4. 支持代码高亮。
-5. 生成meta标签，利于SEO。
+5. 生成 meta 标签，利于 SEO。
 
 综合上述特点，本博客引入`content`，运用到了其内容管理，导航，锚点导航，源码展示等特点。
 
@@ -38,7 +38,7 @@ yarn add nuxt/content
 npx nuxi@latest init <content-app> -t content
 ```
 
-安装依赖采用 [pnpm](/articles/packagetools)  方式
+安装依赖采用 [pnpm](/articles/packagetools) 方式
 
 ```cmd
 pnpm install --shamefully-hoist
@@ -46,31 +46,32 @@ pnpm install --shamefully-hoist
 
 ### 配置
 
-该配置为**构建期模块配置**，顾名思义，引入content能够极大的便利我们的开发，代替我们做了大量的配置开发工作量，包括文章页面路由管理、文章内容查找、代码高亮展示、锚点导航等等。
+该配置为**构建期模块配置**，顾名思义，引入 content 能够极大的便利我们的开发，代替我们做了大量的配置开发工作量，包括文章页面路由管理、文章内容查找、代码高亮展示、锚点导航等等。
 
 ```typescript
 export default defineNuxtConfig({
-  modules: ['@nuxt/content'],  // 引入模块
+  modules: ["@nuxt/content"], // 引入模块
   content: {
     markdown: {
       toc: {
-        depth: 5,             // ？
-        searchDepth: 5,       // ？
-      }
+        depth: 5, // ？
+        searchDepth: 5, // ？
+      },
     },
-    highlight: {              // 配置代码高亮
+    highlight: {
+      // 配置代码高亮
       preload: [
-        'javascript',
-        'typescript',
-        'html',
-        'css',
-        'less',
-        'json',
-        'cmd'
-      ]
+        "javascript",
+        "typescript",
+        "html",
+        "css",
+        "less",
+        "json",
+        "cmd",
+      ],
     },
   },
-})
+});
 ```
 
 ### components
@@ -78,9 +79,10 @@ export default defineNuxtConfig({
 #### 内置组件
 
 内置组件无需引入，可全局使用。
+
 ##### ContentDoc
 
-该组件用于将markdown文档渲染成页面元素。
+该组件用于将 markdown 文档渲染成页面元素。
 
 ###### props
 
@@ -88,12 +90,13 @@ export default defineNuxtConfig({
 - `path`：渲染文件路径，不写则按照`route.path`匹配。
 - `query`：查询字段，用于被 **queryContent** 捕获。
 - `excerpt`：是否展示摘录，默认`false`。
-- `head`：控制head标签内容展示，可以优化`SEO`，默认`true`。
+- `head`：控制 head 标签内容展示，可以优化`SEO`，默认`true`。
 
 ###### slots
 
 `notFound`、`not-found` ：用于未匹配到的默认展示。
 `empty` ：用于者文档内容为空的默认展示。
+
 ###### example
 
 ```html
@@ -125,34 +128,49 @@ export default defineNuxtConfig({
 
 ```vue
 <script setup lang="ts">
-import type { QueryBuilderParams } from '@nuxt/content/dist/runtime/types'
-const queryStr = ref('');
+import type { QueryBuilderParams } from "@nuxt/content/dist/runtime/types";
+const queryStr = ref("");
 // 定义查询条件
-const query = ref<QueryBuilderParams>({ path: '/articles', where: [{ query: { $eq: queryStr.value.toLocaleLowerCase() } }] })
+const query = ref<QueryBuilderParams>({
+  path: "/articles",
+  where: [{ query: { $eq: queryStr.value.toLocaleLowerCase() } }],
+});
 // 监听输入框变化并重写查询条件query
 watch(queryStr, (newQuery) => {
-  query.value = { path: '/articles', where: [{ query: { $eq: newQuery.toLocaleLowerCase() } }] }
-})
+  query.value = {
+    path: "/articles",
+    where: [{ query: { $eq: newQuery.toLocaleLowerCase() } }],
+  };
+});
 const flag = ref(true);
 const hide = () => {
   setTimeout(() => {
     // 避免影响跳转，先跳转后隐藏
     flag.value = false;
-  }, 1000)
-}
+  }, 1000);
+};
 const show = () => {
   flag.value = true;
-}
+};
 </script>
 
 <template>
   <div class="gs-container">
-    全局搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show"></el-input>
+    全局搜索：<el-input
+      v-model="queryStr"
+      class="gs-container-search"
+      @blur="hide"
+      @focus="show"
+    ></el-input>
     <ContentList :query="query">
       <template #default="{ list }">
         <ul class="gs-container-search-list" v-if="flag">
           <el-scrollbar style="max-height: 250px">
-            <li v-for="article in list" :key="article._path" class="gs-container-search-list-item">
+            <li
+              v-for="article in list"
+              :key="article._path"
+              class="gs-container-search-list-item"
+            >
               <NuxtLink :to="article._path">
                 <div class="title">{{ article.title }}</div>
                 <div class="desc">{{ article.description }}</div>
@@ -162,7 +180,9 @@ const show = () => {
         </ul>
       </template>
       <template #not-found>
-        <p class="gs-container-search-no-data" v-if="queryStr && flag">没有找到相关资源</p>
+        <p class="gs-container-search-no-data" v-if="queryStr && flag">
+          没有找到相关资源
+        </p>
       </template>
     </ContentList>
   </div>
@@ -225,7 +245,7 @@ const show = () => {
 </style>
 ```
 
-内置组件就介绍这么多，更多内置组件可以去查阅 :c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。
+内置组件就介绍这么多，更多内置组件可以去查阅 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。
 
 #### 自定义组件
 
@@ -233,16 +253,16 @@ const show = () => {
 
 ##### 需求
 
-需要在markdown中加入一个可以在新窗口打开的链接
+需要在 markdown 中加入一个可以在新窗口打开的链接
 
 ##### 分析
 
-如果是在html页面，只需要一个`a标签`，`target`属性设置为`_blank`即可。
-在markdown中，原生语法不支持新窗口打开功能，因此需要采用content自定义组件的方式实现。
+如果是在 html 页面，只需要一个`a标签`，`target`属性设置为`_blank`即可。
+在 markdown 中，原生语法不支持新窗口打开功能，因此需要采用 content 自定义组件的方式实现。
 
 ##### 用法
 
-在`components`目录下新建子目录`content`，在该目录下声明的组件可以直接在markdown文档中使用，声明一个组件文件`CLink`。但其实，nuxt3中，components组件中的所有组件都已被声明为全局组件，所以只要是components目录下的所有组件均可在markdown文件中引入。`CLink.vue`代码如下：
+在`components`目录下新建子目录`content`，在该目录下声明的组件可以直接在 markdown 文档中使用，声明一个组件文件`CLink`。但其实，nuxt3 中，components 组件中的所有组件都已被声明为全局组件，所以只要是 components 目录下的所有组件均可在 markdown 文件中引入。`CLink.vue`代码如下：
 
 ```vue
 <template>
@@ -252,30 +272,30 @@ const show = () => {
 defineProps({
   name: {
     type: String,
-    default: ''
+    default: "",
   },
   href: {
     type: String,
-    default: '#'
+    default: "#",
   },
   target: {
     type: String,
-    default: 'self'
-  }
-})
+    default: "self",
+  },
+});
 </script>
 ```
 
-要想在markdown中引入，其语法如下：
+要想在 markdown 中引入，其语法如下：
 
 ###### 单行组件
 
 单行组件以冒号（:）开头，组件名称可以用大写或者中横线（-）分隔，参数以花括号（{}）包裹，多个参数用空格分开
 
 ```markdown
-:c-link{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+:c-link{name=vue3 官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
 
-:CLink{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+:CLink{name=vue3 官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
 ```
 
 ###### 嵌套组件
@@ -284,9 +304,9 @@ defineProps({
 
 ```markdown
 ::c-slot
-  ::c-nested
-  This content comes from a nested MDC component in markdown.
-  ::
+::c-nested
+This content comes from a nested MDC component in markdown.
+::
 ::
 ```
 
@@ -310,7 +330,7 @@ defineProps({
 ::c-slot
 Rendered in the default slot of the `AppSlot` component from markdown
 
-#namedSlot 
+#namedSlot
 Content inside the `namedSlot` slot
 ::
 ```
@@ -318,21 +338,22 @@ Content inside the `namedSlot` slot
 ::c-slot
 Rendered in the default slot of the `AppSlot` component from markdown
 
-#namedSlot 
+#namedSlot
 Content inside the `namedSlot` slot
 ::
 
 ### composables
 
-包含封装过的可复用的api。
+包含封装过的可复用的 api。
 
 #### queryContent
 
-在contents目录下查询并获取匹配的内容。
+在 contents 目录下查询并获取匹配的内容。
 
 ##### where(opts)
 
-过滤查询条件。采用Mongo查询语法：
+过滤查询条件。采用 Mongo 查询语法：
+
 - `$eq`：等于
 - `$gt`：大于
 - `$gte`: 大于等于
@@ -342,16 +363,24 @@ Content inside the `namedSlot` slot
 
 ```typescript
 // Implicit (assumes $eq operator)
-const articles = await queryContent('articles').where({ title: 'Home' }).findOne()
+const articles = await queryContent("articles")
+  .where({ title: "Home" })
+  .findOne();
 
 // Explicit $eq
-const articles = await queryContent('articles').where({ title: { $eq: 'Home' } }).findOne()
+const articles = await queryContent("articles")
+  .where({ title: { $eq: "Home" } })
+  .findOne();
 
 // $gt
-const articles = await queryContent('articles').where({ age: { $gt: 18 } }).find()
+const articles = await queryContent("articles")
+  .where({ age: { $gt: 18 } })
+  .find();
 
 // $in
-const articles = await queryContent('articles').where({ name: { $in: ['odin', 'thor'] } }).find()
+const articles = await queryContent("articles")
+  .where({ name: { $in: ["odin", "thor"] } })
+  .find();
 ```
 
 ##### sort(opts)
@@ -364,11 +393,11 @@ const articles = await queryContent('articles').where({ name: { $in: ['odin', 't
 
 ##### limit(N: number)
 
-限制展示N个
+限制展示 N 个
 
 ##### skip(N: number)
 
-跳过N个
+跳过 N 个
 
 ##### without(key: string | Array)
 
@@ -377,52 +406,69 @@ const articles = await queryContent('articles').where({ name: { $in: ['odin', 't
 ##### only(key: string | Array)
 
 满足的留下
+
 ##### find()
 
 查询多个
+
 ##### findOne()
 
 查询一个
 
 ##### 全局查找
 
-本博客采用的全局查找就是通过构建一个 **query: QueryBuilderParams** ，然后通过组件`<ContentList :query='query'></ContentList>`查找获取文章，文章用于查询的信息是在md文件中通过`---`语法声明的。
+本博客采用的全局查找就是通过构建一个 **query: QueryBuilderParams** ，然后通过组件`<ContentList :query='query'></ContentList>`查找获取文章，文章用于查询的信息是在 md 文件中通过`---`语法声明的。
 
 ```vue
 <script setup lang="ts">
-import type { QueryBuilderParams } from '@nuxt/content/dist/runtime/types'
-const queryStr = ref<string>('')
-let query: QueryBuilderParams = ref<QueryBuilderParams>({})
-if (queryStr.value !== '') {
+import type { QueryBuilderParams } from "@nuxt/content/dist/runtime/types";
+const queryStr = ref<string>("");
+let query: QueryBuilderParams = ref<QueryBuilderParams>({});
+if (queryStr.value !== "") {
   // 匹配querys数组
-  query.value = ref<QueryBuilderParams>({ path: '/articles', where: [{ querys: { $contains: queryStr.value.toLocaleLowerCase() } }] })
+  query.value = ref<QueryBuilderParams>({
+    path: "/articles",
+    where: [{ querys: { $contains: queryStr.value.toLocaleLowerCase() } }],
+  });
 }
 watch(queryStr, (newQuery) => {
-  if (newQuery !== '') {
-  // 匹配querys数组
-    query.value = { path: '/articles', where: [{ querys: { $contains: newQuery.toLocaleLowerCase() } }] }
+  if (newQuery !== "") {
+    // 匹配querys数组
+    query.value = {
+      path: "/articles",
+      where: [{ querys: { $contains: newQuery.toLocaleLowerCase() } }],
+    };
   }
-})
+});
 const flag = ref(true);
 const hide = () => {
   setTimeout(() => {
     // 避免影响跳转，先跳转后隐藏
     flag.value = false;
-  }, 500)
-}
+  }, 500);
+};
 const show = () => {
   flag.value = true;
-}
+};
 </script>
 
 <template>
   <div class="gs-container">
-    全局搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show"></el-input>
+    全局搜索：<el-input
+      v-model="queryStr"
+      class="gs-container-search"
+      @blur="hide"
+      @focus="show"
+    ></el-input>
     <ContentList :query="query">
       <template #default="{ list }">
         <ul class="gs-container-search-list" v-if="flag">
           <el-scrollbar style="max-height: 210px; overflow: scroll;">
-            <li v-for="article in list" :key="article._path" class="gs-container-search-list-item">
+            <li
+              v-for="article in list"
+              :key="article._path"
+              class="gs-container-search-list-item"
+            >
               <NuxtLink :to="article._path">
                 <div class="title">{{ article.title }}</div>
                 <div class="desc">{{ article.description }}</div>
@@ -501,7 +547,8 @@ const show = () => {
 
 #### fetchContentNavigation
 
-获取content路由导航
+获取 content 路由导航
+
 ##### 用法
 
 获取路由（树结构）
@@ -509,19 +556,24 @@ const show = () => {
 ```typescript
 // fetchContentNavigation 根据content目录结构生成路由，用queryContent限定想要的目录
 const { data: navigation } = await useAsyncData("cNavigation", () => {
-  return fetchContentNavigation(queryContent('articles'));
+  return fetchContentNavigation(queryContent("articles"));
 });
 ```
 
 ```vue
 <contentNavigation :navigation-tree="navigation"></contentNavigation>
 ```
+
 渲染路由（树结构）
 
 ```vue
 <template>
   <ul class="navigation">
-    <li v-for="(item, index) in navigationTree" :key="index" :title="item.title">
+    <li
+      v-for="(item, index) in navigationTree"
+      :key="index"
+      :title="item.title"
+    >
       <NuxtLink :to="item._path">
         {{ item.title }}
       </NuxtLink>
@@ -541,7 +593,6 @@ defineProps({
     default: () => [],
   },
 });
-
 </script>
 ```
 
@@ -549,22 +600,22 @@ defineProps({
 
 - `QueryBuilder`：`queryContent()`的返回值，用于过滤输出目录
 
-
 ### 自动生成
 
-至此，介绍完了nuxt/content的使用方式，它有很多自动生成的特性：
-1. 根据content目录自动生成导航菜单
-2. 根据content目录自动生成页面结构
-3. 根据markdown文档自动生成锚节点导航
-4. 自带api获取以及过滤内容，速度快性能高
+至此，介绍完了 nuxt/content 的使用方式，它有很多自动生成的特性：
+
+1. 根据 content 目录自动生成导航菜单
+2. 根据 content 目录自动生成页面结构
+3. 根据 markdown 文档自动生成锚节点导航
+4. 自带 api 获取以及过滤内容，速度快性能高
 5. 自动实现代码高亮效果
-6. 生成meta标签，利于SEO。
+6. 生成 meta 标签，利于 SEO。
 
 #### 案例
 
-##### 根据markdown文档自动生成锚节点导航
+##### 根据 markdown 文档自动生成锚节点导航
 
-首先定义文档query字段用于查询条件过滤：
+首先定义文档 query 字段用于查询条件过滤：
 
 ```md
 ---
@@ -579,7 +630,9 @@ query: "vue3"
 ```typescript
 // 通过查询query项匹配路由参数slug，页面由md文档自动生成，此处的slug对应就是页面对应的md文档名称，也就是页面所属的子路由
 if (route.params.slug && route.params.slug.length > 0) {
-  const articles = await queryContent('articles').where({ query: { $eq: route.params.slug[0] } }).find();
+  const articles = await queryContent("articles")
+    .where({ query: { $eq: route.params.slug[0] } })
+    .find();
   if (articles && articles.length > 0) {
     aNavigation.value = articles[0].body.toc.links;
   } else {
@@ -595,14 +648,16 @@ watch(route, async ({ params }) => {
   // 访问pages/index不会有slug，所以判断
   if (params.slug) {
     // 查询articles目录下md文件中用"---"包裹的文件说明，其中route说明等于当前路由slug
-    const articles = await queryContent('articles').where({ query: { $eq: params.slug[0] } }).find();
+    const articles = await queryContent("articles")
+      .where({ query: { $eq: params.slug[0] } })
+      .find();
     if (articles && articles.length > 0) {
       aNavigation.value = articles[0].body.toc.links;
     } else {
       aNavigation.value = [];
     }
   }
-})
+});
 ```
 
 展示路由、高亮当前路由：
@@ -610,7 +665,12 @@ watch(route, async ({ params }) => {
 ```vue
 <template>
   <ul class="navigation">
-    <li v-for="(item, index) in navigationTree" :key="index" :title="item.text" :class="(currentHash === '#' + item.id) ? 'active-hash' : ''">
+    <li
+      v-for="(item, index) in navigationTree"
+      :key="index"
+      :title="item.text"
+      :class="currentHash === '#' + item.id ? 'active-hash' : ''"
+    >
       <a :href="'#' + item.id">{{ item.text }}</a>
       <anchorNavigation
         v-if="item.children"
@@ -629,12 +689,11 @@ defineProps({
   },
 });
 
-const route = useRoute()
-const currentHash = ref(route.hash)
+const route = useRoute();
+const currentHash = ref(route.hash);
 watch(route, (newRoute) => {
-  currentHash.value = newRoute.hash
+  currentHash.value = newRoute.hash;
 });
-
 </script>
 ```
 
@@ -642,7 +701,7 @@ watch(route, (newRoute) => {
 
 #### 组件配置问题
 
-:c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/mdc/props target=blank} 有如下配置，设置如下nuxt.config.ts以后，部分组件无法正常使用
+:c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/mdc/props target=blank} 有如下配置，设置如下 nuxt.config.ts 以后，部分组件无法正常使用
 
 ```javascript
 components: {
@@ -651,7 +710,7 @@ components: {
 }
 ```
 
-nuxt3项目中，默认components文件夹中的组件是全局，如果加上这个属性，那就是部分全局，剩下的都不再作为全局组件，所以产生了问题。
+nuxt3 项目中，默认 components 文件夹中的组件是全局，如果加上这个属性，那就是部分全局，剩下的都不再作为全局组件，所以产生了问题。
 
 `解决方法`：去掉该条配置项即可
 
@@ -669,7 +728,7 @@ nuxt3项目中，默认components文件夹中的组件是全局，如果加上�
 :c-text{text=引导 dir=center}
 ```
 
-那么我们按照[组件插槽](#组件插槽)的方式，改写CText.vue代码
+那么我们按照[组件插槽](#组件插槽)的方式，改写 CText.vue 代码
 
 改写前：
 
@@ -683,13 +742,13 @@ nuxt3项目中，默认components文件夹中的组件是全局，如果加上�
 defineProps({
   text: {
     type: String,
-    default: ''
+    default: "",
   },
   dir: {
     type: String,
-    default: 'left'
+    default: "left",
   },
-})
+});
 </script>
 ```
 
@@ -705,9 +764,9 @@ defineProps({
 defineProps({
   dir: {
     type: String,
-    default: 'left'
+    default: "left",
   },
-})
+});
 </script>
 ```
 
@@ -715,17 +774,14 @@ defineProps({
 
 ```md
 ::c-text{dir=center}
-  :c-link{name=引导 href=# target=blank}
+:c-link{name=测试 href=# target=blank}
 ::
 ```
 
 效果展示
 
 ::c-text{dir=center}
-  ::c-link{href=# target=blank}
-  引导
-  ::
+::c-link{href=# target=blank}
+测试
 ::
-
-
-
+::

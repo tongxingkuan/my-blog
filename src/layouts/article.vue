@@ -161,4 +161,8 @@ watch(route, async ({ params }) => {
   text-align: center;
   line-height: 30px;
 }
+
+:global(.el-scrollbar__bar.is-horizontal) {
+  display: none;
+}
 </style>

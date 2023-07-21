@@ -204,33 +204,21 @@ select:-webkit-autofill {
   }
 
   h4 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin: 1.2rem 0;
-    line-height: 1.2rem;
-    text-indent: 2rem;
-    & ~ p, & ~ ul, & ~ ol {
-      padding-left: 2rem;
-    }
+    line-height: 1.4rem;
   }
 
   h5 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin: 1rem 0;
-    line-height: 1rem;
-    text-indent: 4rem;
-    & ~ p, & ~ ul, & ~ ol {
-      padding-left: 4rem;
-    }
+    line-height: 1.2rem;
   }
 
   h6 {
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin: 0.8rem 0;
-    line-height: 0.8rem;
-    text-indent: 6rem;
-    & ~ p, & ~ ul, & ~ ol {
-      padding-left: 6rem;
-    }
+    line-height: 1rem;
   }
 
   strong {
@@ -268,6 +256,10 @@ select:-webkit-autofill {
     max-height: 500px;
   }
 
+  p {
+    margin-bottom: 16px;
+  }
+
   p > code, li > code {
     border-radius: 0.2rem;
     padding: 0.2rem 0.375rem 0.2rem 0.375rem;
@@ -277,10 +269,12 @@ select:-webkit-autofill {
   img {
     display: block;
     margin: 20px auto;
+    max-width: 100%;
   }
 
   ul {
-    padding: 20px;
+    padding: 0 20px 20px;
+    list-style: square;
     li {
       list-style: square;
       margin: 0.5rem 0;
@@ -288,7 +282,8 @@ select:-webkit-autofill {
   }
 
   ol {
-    padding: 20px;
+    padding: 0 20px 20px;
+    list-style: decimal;
     li {
       list-style: decimal;
       margin: 0.5rem 0;
