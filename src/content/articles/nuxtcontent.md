@@ -10,7 +10,7 @@ querys: ["nuxt", "content"]
 
 **nuxt/content** v2 版本是针对 **nuxt 3** 的一个模块库。引入 nuxt/content 后，可以参考 :c-link{name=nuxt3 文档-模块 href=https://57code.gitee.io/nuxt3-docs-zh/directory-structure/nuxt-config.html#%E6%9E%84%E5%BB%BA%E6%9C%9F%E6%A8%A1%E5%9D%97-buildmodules target=blank} 添加配置。
 
-本文章不是完整的 nuxt/content 文档，仅针对本项目中使用 nuxt/content 相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于 nuxt/content（以下简称 content）相关技术的讨论，如需了解本文对 nuxt3 的使用，请前往 [nuxt3](/articles/nuxt3)。
+本文章不是完整的 nuxt/content 文档，仅针对本项目中使用 nuxt/content 相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于 nuxt/content（以下简称 content）相关技术的讨论，如需了解本文对 nuxt3 的使用，请前往本博客文章 [nuxt3](/articles/nuxt3)。
 
 ### 特点
 
@@ -785,3 +785,49 @@ defineProps({
 测试
 ::
 ::
+
+#### 锚点无法跳转问题
+
+从 articles/A 跳到 page/B#a 时，页面没有定位到锚点处
+
+原因：因为content对md文件生成的锚点链接使用的是`ProseA`组件，而该组件内部使用的是`NuxtLink`组件，**NuxtLink不适用于hash路由**。
+
+解决方法：在B页面添加如下代码：
+
+```vue
+<template>
+  <div ref="ele">
+    <ContentDoc>
+      <template #not-found>
+        <h2>未找到资源</h2>
+      </template>
+      <template #empty>
+        <h2>资源为空</h2>
+      </template>
+    </ContentDoc>
+  </div>
+</template>
+<script setup>
+
+const ele = ref(null)
+
+const goAnchor = (selector) => {
+  // 最好加个定时器给页面缓冲时间
+  setTimeout(() => {
+    // 获取锚点元素
+    let anchor = ele.value.querySelector(selector)
+    anchor.scrollIntoView()
+  }, 10)
+}
+
+onMounted(() => {
+  // 判断是否存在锚点
+  if (window.location.hash) {
+    // 解决锚点未定位到指定位置
+    goAnchor(window.location.hash)
+  }
+})
+</script>
+```
+
+#### 如何实现通过页面的方式新增博客？

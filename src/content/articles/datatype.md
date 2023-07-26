@@ -12,6 +12,7 @@ querys:
     "bigInt",
     "object",
     "array",
+    "数据",
     "数据类型",
   ]
 ---
@@ -82,6 +83,7 @@ function deepCopy(source) {
             result[k] = source[k].valueOf();
           }
         } else if (typeof source[k] === "function") {
+          // 函数处理！！
           result[k] = new Function("return " + source[k].toString())();
         } else {
           result[k] = source[k];
@@ -195,85 +197,99 @@ false + '' // 'false'
 
 ##### 查
 
-- `charAt`
+###### `charAt`
 
 ```js
 "hello world".charAt(4); // 'o'
 ```
 
-- `charCodeAt`
+###### `charCodeAt`
 
 ```js
 "hello world".charCodeAt(4); // 111（'o'的 Unicode 编码）
 ```
 
-- `indexOf`
+###### `indexOf`
 
 ```js
 "hello world".indexOf("o"); // 4，返回第一个匹配的索引
 ```
 
-- `lastIndexOf`
+###### `lastIndexOf`
 
 ```js
 "hello world".lastIndexOf("o"); // 7，从后往前，返回第一个匹配的索引
 ```
 
-- `includes`
+###### `includes`
 
 ```js
 "hello world".includes("wor", 0); // true，查询是否包含子串，第二个参数指定起始位置，默认从开始查询（区分大小写）
 ```
 
-- `match`
+###### `match`
+
+查找找到一个或多个正则表达式的匹配。
 
 ```js
-"hello world".match(/o/g); // ['o', 'o']，查找找到一个或多个正则表达式的匹配。
+"hello wOrld".match(/o/ig); // ['o', 'O']，
 ```
 
-- `search`
+###### `search`
+
+寻找匹配正则表达式的子字符串，找到则返回其索引，否则返回-1
 
 ```js
-"hello world".search(/orld/); // 7，寻找匹配正则表达式的子字符串，找到则返回其索引，否则返回-1
+"hello world".search(/orld/); // 7
 ```
 
-- `startsWith`
+###### `startsWith`
+
+查询是否以指定的子字符串开头，第二个参数指定起始位置，默认从开始查询（区分大小写）
 
 ```js
-"hello world".startsWith("hello", 0); // true，查询是否以指定的子字符串开头，第二个参数指定起始位置，默认从开始查询（区分大小写）
+"hello world".startsWith("hello", 0); // true
 ```
 
-- `endsWith`
+###### `endsWith`
+
+查询是否以指定的子字符串结尾，第二个参数指定字符串长度，默认为原始字符串的长度（区分大小写）
 
 ```js
-"hello world".endsWith("hello", 5); // false，查询是否以指定的子字符串结尾，第二个参数指定字符串长度，默认为原始字符串的长度（区分大小写）
+"hello world".endsWith("hello", 5); // false
 ```
 
 ##### 增
 
-- `repeat`
+###### `repeat`
+
+复制字符串指定次数，并将它们连接在一起返回。
 
 ```js
-"hello world".repeat(2); // 'hello worldhello world'， 复制字符串指定次数，并将它们连接在一起返回。
+"hello world".repeat(2); // 'hello worldhello world'
 ```
 
-- `concat`
+###### `concat`
+
+字符串拼接，不改变原字符串。
 
 ```js
-"hello world".concat("test"); // 'hello worldtest'，字符串拼接，不改变源字符串。
+"hello world".concat("test"); // 'hello worldtest'
 ```
 
 ##### 改
 
-- `replace`
+###### `replace`
+
+在字符串中查找匹配的子串，并替换与正则表达式匹配的子串。
 
 ```js
-"hello world".replace(/o/g, 0); // 'hell0 w0rld'，在字符串中查找匹配的子串，并替换与正则表达式匹配的子串。
+"hello world".replace(/o/g, 0); // 'hell0 w0rld'
 ```
 
 ##### 截取
 
-- `slice`
+###### `slice`
 
 `slice(start, end)` 方法可提取字符串的某个部分，并以新的字符串返回被提取的部分。截取区间[start, end)，如果 start 为负数且没有 end，表示位置从后往前数，截取到末尾，end 为负数时，`-1`指字符串的最后一个字符的位置。_slice 操作不影响原字符串_，因此也常用来复制字符串`slice(0)`。
 
@@ -285,7 +301,7 @@ let a = "hello world";
 let b = a.slice(0); // 拷贝
 ```
 
-- `substr`
+###### `substr`
 
 `substr(start, length)` 方法可在字符串中抽取从 `start` 下标开始的指定长度的字符。_substr 不影响原字符串_。
 
@@ -294,11 +310,11 @@ let b = a.slice(0); // 拷贝
 "hello world".substr(-2, 1); // 'l'
 ```
 
-- `substring`
+###### `substring`
 
 `substring(start, end)` 用法同 slice，但是 start，end 均不支持负数。_substring 不影响原字符串_。
 
-- `split`
+###### `split`
 
 `split()` 将字符串拆分成数组
 

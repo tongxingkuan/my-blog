@@ -1,12 +1,14 @@
 <template>
-  <ContentDoc>
-    <template #not-found>
-      <h2>未找到资源</h2>
-    </template>
-    <template #empty>
-      <h2>资源为空</h2>
-    </template>
-  </ContentDoc>
+  <div ref="ele">
+    <ContentDoc>
+      <template #not-found>
+        <h2>未找到资源</h2>
+      </template>
+      <template #empty>
+        <h2>资源为空</h2>
+      </template>
+    </ContentDoc>
+  </div>
 </template>
 <script setup>
 import { ElMessage } from 'element-plus'
@@ -18,7 +20,22 @@ definePageMeta({
 
 const clipboard = ref(null)
 
+const ele = ref(null)
+
+const goAnchor = (selector) => {
+  // 最好加个定时器给页面缓冲时间
+  setTimeout(() => {
+    // 获取锚点元素
+    let anchor = ele.value.querySelector(selector)
+    anchor.scrollIntoView()
+  }, 100)
+}
+
 onMounted(() => {
+  if (window.location.hash) {
+    // hash路由解编码
+    goAnchor(decodeURIComponent(window.location.hash))
+  }
   let preDomList = document.getElementsByTagName('pre');
   let len = preDomList.length
   if (len > 0) {

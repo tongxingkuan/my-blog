@@ -1,9 +1,14 @@
 <template>
+  <Title>文章</Title>
   <div>
-    <ul v-if="articlesRef.length > 0">
-      <li v-for="(article, index) in articlesRef" :key="article.name">
-        {{ index + 1 }}.
-        <nuxt-link :to="article.path">{{ article.name + ' —— ' + article.desc }}</nuxt-link>
+    <ul v-if="articlesRef.length > 0" class="article-list">
+      <li v-for="(article, index) in articlesRef" :key="article.name" :title="article.name + '：' + article.desc">
+        <nuxt-link :to="article.path" class="article-link">
+          <span class="index">{{ index + 1 }}</span>
+          <span class="title">{{ article.name }}</span>
+          <span class="seperator">——</span>
+          <span class="desc">{{ article.desc }}</span>
+        </nuxt-link>
       </li>
     </ul>
     <noData v-else></noData>
@@ -62,3 +67,41 @@ const getArticles = () => {
 }
 getArticles()
 </script>
+<style lang="less" scoped>
+.article-list {
+  padding: 20px;
+
+  li {
+    width: 100%;
+
+    .article-link {
+      display: block;
+      height: 40px;
+      line-height: 40px;
+      width: 100%;
+      display: flex;
+      .index {
+        display: inline-block;
+        width: 30px;
+        text-align: right;
+        margin-right: 10px;
+      }
+
+      .title {
+        display: inline-block;
+        width: 200px;
+        text-align: right;
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+
+      .desc {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        flex: 1;
+      }
+    }
+  }
+}
+</style>
