@@ -15,7 +15,10 @@ import { ElMessage } from 'element-plus'
 import ClipboardJS from 'clipboard'
 
 definePageMeta({
-  layout: "article"
+  layout: "article",
+  pageTransition: {
+    name: 'articles'
+  }
 });
 
 const clipboard = ref(null)

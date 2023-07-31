@@ -31,5 +31,6 @@ export default defineNuxtConfig({
     '@/assets/style/normalize.less',
     'element-plus/dist/index.css',
     '@/assets/style/theme.less',
+    '@/assets/style/animate.less'
   ]
 })
