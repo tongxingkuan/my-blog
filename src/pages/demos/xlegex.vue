@@ -3,7 +3,7 @@
   <div ref="containerRef" class="container">
     <template v-for="cube in allCubes" :key="cube.id">
       <Transition name="slide-fade">
-        <Cube :cube="cube" @click-cube="clickCube" v-if="cube.status === 1"/>
+        <Cube :cube="cube" @click-cube="clickCube" v-if="[0, 1].includes(cube.status)"/>
       </Transition>
     </template>
     <div class="slots">
