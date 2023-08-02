@@ -454,7 +454,7 @@ $ mkdir packages/vue/examples/test.html
 
 ##### 浏览器调用栈
 
-:c-image-with-thumbnail{alt=callStack src=/img/callStack.png}
+:c-image-with-thumbnail{alt=callStack src=/img/articles/callStack.png}
 
 ##### 浏览器扩展
 
@@ -678,7 +678,7 @@ if (!isMounted) {
 
 命中断点以后，我们可以在 **callStack** 中查看调用链，因此也就知道了 **mount** 方法的上一个调用是在 **app.mount** 中。
 
-:c-image-with-thumbnail{alt=callStack src=/img/callStack.png}
+:c-image-with-thumbnail{alt=callStack src=/img/articles/callStack.png}
 
 
 接下来我们继续往下走，单步调试快捷键 **F10** ，进入方法快捷键 **F11** ，我们注意到以下代码：
@@ -695,7 +695,7 @@ const vnode = createVNode(rootComponent, rootProps);
 
 断点进入此方法，可以发现此方法也是由方法 **createVNodeWithArgsTransform** 所返回的，可以发现[闭包](/#)在 vue 源码中或者说大多数框架源码中被运用的场景非常多，此博客也会专门出一篇文章来讨论一下这个概念。从返回值可以看出，接下来进入到了 **\_createVNode** 方法。先按最简单的来，此处我们传入的参数 **type** 如下：
 
-:c-image-with-thumbnail{alt=type src=/img/type.png}
+:c-image-with-thumbnail{alt=type src=/img/articles/type.png}
 
 最终通过**createBaseVNode**方法创建并返回 vnode。
 
@@ -1823,4 +1823,4 @@ const mountElement = (
 
 最终执行 **hostInsert** 将DOM插入到页面中。整体流程可以通过调用栈一目了然：
 
-:c-image-with-thumbnail{alt=callStack2 src=/img/callStack2.png}
+:c-image-with-thumbnail{alt=callStack2 src=/img/articles/callStack2.png}

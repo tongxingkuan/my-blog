@@ -19,11 +19,14 @@
         </template>
       </el-breadcrumb>
     </nav>
-    <main class="main">
+    <main class="demos">
       <el-scrollbar style="max-height: calc(100vh - 110px)">
         <slot></slot>
       </el-scrollbar>
     </main>
+    <aside class="all-tag-list">
+      
+    </aside>
     <footer class="footer">版权所有@copyright</footer>
   </div>
 </template>
@@ -100,7 +103,7 @@ const computedRouteList = computed(() => {
   justify-content: right;
 }
 
-.main {
+.demos {
   display: block;
   width: auto;
   height: calc(100vh - 110px);

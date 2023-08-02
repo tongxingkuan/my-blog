@@ -24,7 +24,7 @@
         <contentNavigation :navigation-tree="cNavigation"></contentNavigation>
       </el-scrollbar>
     </aside>
-    <main class="main">
+    <main class="articles">
       <el-scrollbar style="max-height: calc(100vh - 110px)">
         <slot></slot>
       </el-scrollbar>

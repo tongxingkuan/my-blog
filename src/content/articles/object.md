@@ -51,7 +51,7 @@ a instanceof Array; // true
 
 为什么都返回 true，原因就是`原型链可以向上查找，最终到Object`。所以可以得到数组的原型链如下：
 
-:c-image-with-thumbnail{alt=数组原型链 src=/img/prototype.png}
+:c-image-with-thumbnail{alt=数组原型链 src=/img/articles/prototype.png}
 
 由此我们知道数组也是对象，既然是对象，那么就有属性和方法
 
@@ -342,7 +342,7 @@ let reg = /(?<first>(?<second>(?<third>a)b)c)|(?<fourth>ba)/g;
 reg.exec("5aabcaba_a4aba_a a_a_abca_a a a_acbbaa b aa"); // 执行结果见下图
 ```
 
-:c-image-with-thumbnail{alt=exec src=/img/exec.png}
+:c-image-with-thumbnail{alt=exec src=/img/articles/exec.png}
 
 ##### test(string)
 

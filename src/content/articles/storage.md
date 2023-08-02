@@ -129,9 +129,9 @@ sessionStorage.getItem(key)
 
 ### 浏览器截图
 
-:c-image-with-thumbnail{alt=application src=/img/application.png}
+:c-image-with-thumbnail{alt=application src=/img/articles/application.png}
 
-:c-image-with-thumbnail{alt=storage src=/img/storage.png}
+:c-image-with-thumbnail{alt=storage src=/img/articles/storage.png}
 
 ### 对比总结
 
