@@ -150,3 +150,5 @@ function clickCube(cube: Cube) {
 #### 问题
 
 1. 为什么在方块外部添加 transition 无法实现点击动画
+
+答：:c-link{name=vue3官方文档 href=https://cn.vuejs.org/api/built-in-components.html#transition target=blank} 指出 `<Transition>` 是为 **_单个_** 元素或组件提供动画过渡效果。所以此处要用 `<TransitionGroup>` 为 **_多个_** 元素或组件提供过渡效果。
