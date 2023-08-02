@@ -10,18 +10,13 @@ export function useGame(config: GameConfig) {
   const slots = ref<Cube[]>([])      // 插槽，存放点击的方块
   const size = 40
 
-  function updateState() {
-    allCubes.value.forEach((cube) => {
-      cube.status = cube.maskCubes.every(c => c.status > 0) ? 1 : 0
-    })
-  }
   // 点击方块
   function clickCube(cube: Cube) {
     if (slots.value.length === 7) return
-    cube.status = 2
+    cube.status = 2   // 插槽中方块类型为2
     let allIndex = allCubes.value.findIndex(item => item.id === cube.id);
     if (allIndex > -1)
-      // 删除所有节点中改节点
+      // 删除所有方块中改方块
       allCubes.value.splice(allIndex, 1)
     // 判断插槽是否消除
     // 首先获取插槽中相同类型的方块
@@ -74,7 +69,7 @@ export function useGame(config: GameConfig) {
       itemLists.splice(itemLen - types, itemLen)
     }
 
-    // 打乱节点
+    // 打乱方块
     itemLists = shuffle(shuffle(itemLists))
     let len = 0
     let layer = 1
@@ -98,9 +93,7 @@ export function useGame(config: GameConfig) {
       let layer = index + 1
       indexSet.clear()
       let i = 0
-      // 每一层的节点数组（用于下一次循环判断节点是否被遮挡）
-      let perLayerCubes :Cube[] = []
-      // 每层节点
+      // 每层方块
       layerItems.forEach((type) => {
         // 位置计算因子
         i = floor(random(0, layer ** 2))
@@ -109,30 +102,28 @@ export function useGame(config: GameConfig) {
           i = floor(random(0, layer ** 2))
         const row = floor(i / layer)
         const column = layer ? i % layer : 0
-        // 节点类型
+        // 方块类型
         let cube: Cube = {
           id: `${layer}-${type}-${i}`, // id: 层数-类型-索引
           layer,                       // layer: 层级
           type,
-          status: 0,
+          status: 1,                   // 初始化方块类型为1
           maskCubes: [],
           x: width + (size * row - (size / 2) * layer),
           y: height + (size * column - (size / 2) * layer)
         }
         let xy = [cube.x, cube.y]
-        // 遍历上层节点判断是否遮罩当前节点
+        // 遍历上层方块判断是否遮罩当前方块
         previousCubes.forEach(cb => {
           if (Math.abs(cb.x - xy[0]) <= size && Math.abs(cb.y - xy[1]) <= size) {
             cube.maskCubes.push(cb)
           }
         })
-        perLayerCubes.push(cube)
         indexSet.add(i)
+        allCubes.value.push(cube)
+        previousCubes.push(cube)
       })
-      allCubes.value = allCubes.value.concat(perLayerCubes)
-      previousCubes = perLayerCubes
     })
-    updateState()
   }
 
   return {

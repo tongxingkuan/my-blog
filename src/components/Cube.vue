@@ -24,7 +24,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(["clickCube"]);
 
 // 无遮挡则肯定能点击，有遮挡 若遮挡不可点击则不能点击
-const isFreeze = computed(() => (props.cube.maskCubes.length > 0 ? props.cube.maskCubes.some((o) => o.status < 2) : false));
+const isFreeze = computed(() => (props.cube.maskCubes.length > 0 ? true : false));
 const isDock = computed(() => (props.isDock || false))
 
 const handleClick = () => {

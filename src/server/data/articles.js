@@ -47,6 +47,12 @@ const articles = [
     tag: '基本数据类型、引用数据类型',
     desc: '介绍前端js中的数据类型：包括基本数据类型和引用数据类型'
   },
+  {
+    name: 'x了个x代码解读',
+    path: 'articles/xlegex',
+    tag: 'vue3、nuxt3',
+    desc: '前端代码实现游戏x了个x'
+  },
 ];
 
 const find = (pageSize, pageNum, tag, name) => {

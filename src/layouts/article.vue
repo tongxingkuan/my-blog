@@ -99,14 +99,13 @@ if (route.params.slug && route.params.slug.length > 0) {
   }
 }
 watch(route, async ({ params }) => {
+  aNavigation.value = [];
   // 访问pages/index不会有slug，所以判断
   if (params.slug) {
     // 查询articles目录下md文件中用"---"包裹的文件说明，其中route说明等于当前路由slug
     const articles = await queryContent('articles/' + route.params.slug[0]).find();
     if (articles && articles.length > 0) {
       aNavigation.value = articles[0].body.toc.links;
-    } else {
-      aNavigation.value = [];
     }
   }
 })
@@ -149,7 +148,7 @@ watch(route, async ({ params }) => {
   padding-left: 50px;
 }
 
-.main {
+.articles {
   float: left;
   display: block;
   width: 60%;
