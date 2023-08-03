@@ -831,3 +831,9 @@ onMounted(() => {
 ```
 
 #### 如何实现通过页面的方式新增博客？
+
+#### 刷新页面后路由跳转报错。
+
+报错截图如下：
+
+:c-image-with-thumbnail{alt=路由跳转报错 src=/img/articles/question.png}

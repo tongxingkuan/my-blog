@@ -151,4 +151,44 @@ function clickCube(cube: Cube) {
 
 1. 为什么在方块外部添加 transition 无法实现点击动画
 
-答：:c-link{name=vue3官方文档 href=https://cn.vuejs.org/api/built-in-components.html#transition target=blank} 指出 `<Transition>` 是为 **_单个_** 元素或组件提供动画过渡效果。所以此处要用 `<TransitionGroup>` 为 **_多个_** 元素或组件提供过渡效果。
+答： :c-link{name=vue3官方文档 href=https://cn.vuejs.org/api/built-in-components.html#transition target=blank} 指出 `<Transition>` 是为 **_单个_** 元素或组件提供动画过渡效果。所以此处要用 `<TransitionGroup>` 为 **_多个_** 元素或组件提供过渡效果。
+
+2. 如何实现同一层方块不重合
+
+答：先仿照上述设置方块坐标代码建立如下代码：
+
+```js
+/*
+* layer: 层数  times: 每层方块个数 要求 times <= layer ** 2 
+*/
+function f(layer, times) {
+  let indexSet = new Set();
+  for (let j = 0; j < times; j++) {
+    i = Math.floor(Math.random(0, 1) * layer ** 2);
+    // 确保同一层位置不会重合
+    while (indexSet.has(i)) i = Math.floor(Math.random(0, 1) * layer ** 2);
+    const row = Math.floor(i / layer);
+    const column = layer ? i % layer : 0;
+    console.log(row, column);
+    indexSet.add(i);
+  }
+}
+```
+
+执行截图如下：
+
+:c-image-with-thumbnail{alt=执行结果 src=/img/articles/xlegex.png}
+
+可见，这个方法每次都会生成一个方块坐标，且不重合。那么再抽出核心代码
+
+```js
+function f2(layer) {
+  for (let i = 0; i < layer ** 2; i++) {
+    const row = Math.floor(i / layer);
+    const column = layer ? i % layer : 0;
+    console.log(row, column)
+  }
+}
+```
+
+由此得到一段通用代码，该方法返回一个layer * layer的正方形的所有不重复整点坐标！

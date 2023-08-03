@@ -108,7 +108,7 @@ export function useGame(config: GameConfig) {
         while (indexSet.has(i))
           i = floor(random(0, layer ** 2))
         const row = floor(i / layer)
-        const column = layer ? i % layer : 0
+        const column = i % layer
         // 节点类型
         let cube: Cube = {
           id: `${layer}-${type}-${i}`, // id: 层数-类型-索引

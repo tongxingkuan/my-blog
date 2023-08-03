@@ -89,13 +89,13 @@ getArticles()
 
       .title {
         display: inline-block;
-        width: 200px;
         text-align: right;
         margin-right: 10px;
         flex-shrink: 0;
       }
 
       .desc {
+        margin-left: 10px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;

@@ -446,7 +446,7 @@ $ mkdir packages/vue/examples/test.html
 
 ##### vscode 快捷键
 
-快速定位文件位置 **ctrl** + **shfit** + **p** 、展开代码 **ctrl** + **k** + **j** 、 折叠代码 **ctrl** + **k** + **0** 、转到方法定义 **ctrl** + **t** ；
+快速定位文件位置 <kbd>ctrl</kbd> + <kbd>shfit</kbd> + <kbd>p</kbd>、展开代码 <kbd>ctrl</kbd> + <kbd>k</kbd> + <kbd>j</kbd> 、 折叠代码 <kbd>ctrl</kbd> + <kbd>k</kbd> + <kbd>0</kbd> 、转到方法定义 <kbd>ctrl</kbd> + <kbd>t</kbd> ；
 
 ##### 日志、断点跟踪
 

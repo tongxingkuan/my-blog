@@ -55,10 +55,7 @@ declare interface Demo {
 }
 // 布局
 definePageMeta({
-  layout: "demo",
-  pageTransition: {
-    name: "demos",
-  },
+  layout: "demo"
 });
 // 分页相关
 const demosRef = ref<Demo[]>([]);

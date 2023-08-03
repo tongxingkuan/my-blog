@@ -4,12 +4,12 @@ const queryStr = ref<string>('')
 let query: QueryBuilderParams = ref<QueryBuilderParams>({})
 if (queryStr.value !== '') {
   // 匹配querys数组
-  query.value = ref<QueryBuilderParams>({ path: '/', where: [{ querys: { $contains: queryStr.value.toLocaleLowerCase() } }] })
+  query.value = ref<QueryBuilderParams>({ path: '/', where: [{ querys: { $contains: queryStr.value } }] })
 }
 watch(queryStr, (newQuery) => {
   if (newQuery !== '') {
   // 匹配querys数组
-    query.value = { path: '/', where: [{ querys: { $contains: newQuery.toLocaleLowerCase() } }] }
+    query.value = { path: '/', where: [{ querys: { $contains: newQuery } }] }
   }
 })
 const flag = ref(true);

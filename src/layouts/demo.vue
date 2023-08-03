@@ -1,4 +1,5 @@
 <template>
+<client-only>
   <div class="article-layout">
     <header class="header">
       <h1>童话的博客</h1>
@@ -24,11 +25,9 @@
         <slot></slot>
       </el-scrollbar>
     </main>
-    <aside class="all-tag-list">
-      
-    </aside>
     <footer class="footer">版权所有@copyright</footer>
   </div>
+</client-only>
 </template>
 <script setup lang="ts">
 declare interface Breadcrumb {
