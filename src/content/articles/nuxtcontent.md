@@ -830,10 +830,12 @@ onMounted(() => {
 </script>
 ```
 
-#### 如何实现通过页面的方式新增博客？
+<!-- #### 如何实现通过页面的方式新增博客？ -->
 
 #### 刷新页面后路由跳转报错。
 
 报错截图如下：
 
 :c-image-with-thumbnail{alt=路由跳转报错 src=/img/articles/question.png}
+
+解决方案：目前定位在layout中使用了element-plus组件导致，按照网上配置`ID_INJECTION_KEY`后同样有报错，暂定解决方案是在外层添加 _\<client-only\>_ 组件

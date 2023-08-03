@@ -2,7 +2,7 @@
 export const cachedApiConfig: CachedApiConfig[] = [
   {
     url: '/api/articles',
-    filePath: '/src/server/data/demos.js',
+    filePath: '/src/server/data/articles.js',
     noCache: true
   },
   {

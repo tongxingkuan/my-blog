@@ -7,7 +7,7 @@
     </header>
     <nav class="nav">
       当前位置：
-      <el-breadcrumb separator="/">
+      <el-breadcrumb :separator-icon="ArrowRight">
         <template v-for="(breadcrumb, index) in computedRouteList" :key="breadcrumb.name">
           <template v-if="index < computedRouteList.length - 1">
             <el-breadcrumb-item :to="{ path: breadcrumb.path }">{{
@@ -30,6 +30,7 @@
 </client-only>
 </template>
 <script setup lang="ts">
+import { ArrowRight } from '@element-plus/icons-vue'
 declare interface Breadcrumb {
   name: string;
   path: string;
