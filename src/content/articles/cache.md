@@ -79,16 +79,17 @@ interface CachedApiConfig {
 
 ```js
 // cacheApiConfig.js
+// 需要缓存的接口
 export const cachedApiConfig: CachedApiConfig[] = [
   {
     url: '/api/articles',
-    noCache: false,
-    maxAge: 10
+    filePath: '/src/server/data/articles.js',
+    noCache: true
   },
   {
     url: '/api/demos',
-    filePath: '/src/server/data/demos.js',
-    noCache: true
+    noCache: false,
+    maxAge: 10
   }
 ]
 ```
@@ -111,6 +112,8 @@ export default fromNodeMiddleware((req, res, next) => {
       next()
     } else if (noCache && filePath) {
       // 设置协商缓存
+      // 必须先设置为no-cache，才会启用协商缓存
+      res.setHeader("Cache-Control", "no-cache");
       const lastModified = fs.statSync(path.resolve() + filePath).ctime.toGMTString();
       const ifModifiedSince = req.headers['if-modified-since'];
       const ifNoneMatch =  req.headers["if-none-match"];
@@ -122,14 +125,14 @@ export default fromNodeMiddleware((req, res, next) => {
           // 判断文件的MD5是否一致，不一致说明文件内容变更
           const isSameFlag = ifNoneMatch === etag;
           // 两者满足其一则使用浏览器缓存
+          // 判断文件是否有改动 ------------Start-------------
           if (isSameCtime || isSameFlag) {
             res.statusCode = 304;
-            next()
           } else {
             res.setHeader("Last-Modified", lastModified);
-            res.setHeader("Etag", etag);
-            next()
+            res.setHeader("ETag", etag);
           }
+          next()
         }
       });
     }
@@ -141,5 +144,6 @@ export default fromNodeMiddleware((req, res, next) => {
 
 阅读response.js中的代码，首先根据接口路径和配置，找到接口对应资源文件，然后获取`LastModified`和`Etag`，分别对比请求头中的`If-Modified-Since`和`If-None-Match`，其中有一对相等则判断文件未改变，设置状态码为 **304** ，否则重新设置`Last-Modified`和`Etag`。
 
+### 总结
 
-
+一般我们针对 _占用空间大且不轻易变动_ 的数据，采用浏览器缓存机制可以显著提升前端页面性能。但是针对 _频繁变动_ 的数据，经常通过 _添加时间戳_ 的方式，避免缓存。跳转以查看更多[页面性能优化](/articles/performance)。
