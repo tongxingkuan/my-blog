@@ -8,7 +8,7 @@
           <div v-for="i in arr" :key="i" class="image-content">
             <img
               :data-url="'/img/demos/lazyload/' + i + '.jpg'"
-              src="https://img.zcool.cn/community/012e5a5b99d79ba8012099c81012fc.gif"
+              src="/img/demos/lazyload/loading.gif"
               :alt="i"
             />
             <div class="mask">{{ i + '.jpg' }}</div>
@@ -33,7 +33,7 @@
           <div v-for="i in arr" :key="i" class="image-content">
             <img
               :data-url="'/img/demos/lazyload/' + i + '.jpg'"
-              src="https://img.zcool.cn/community/012e5a5b99d79ba8012099c81012fc.gif"
+              src="/img/demos/lazyload/loading.gif"
               :alt="i"
             />
           </div>
@@ -49,7 +49,7 @@
       <div class="title">第三方实现</div>
       <div class="container">
         <el-scrollbar>
-          <div v-for="i in arr" :key="i" class="image-content" v-lazy-container="{ selector: 'img', error: 'https://img.tukuppt.com/png_preview/00/08/20/SWFxnfT5Gv.jpg!/fw/780', loading: 'https://img.zcool.cn/community/012e5a5b99d79ba8012099c81012fc.gif' }">
+          <div v-for="i in arr" :key="i" class="image-content" v-lazy-container="{ selector: 'img', error: 'https://img.tukuppt.com/png_preview/00/08/20/SWFxnfT5Gv.jpg!/fw/780', loading: '/img/demos/lazyload/loading.gif' }">
             <img
               :data-src="'/img/demos/lazyload/' + i + '.jpg'"
               :alt="i"
@@ -59,7 +59,7 @@
       </div>
       <div class="explain">
         <el-scrollbar>
-          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">文档地址</a>
+          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">vue-lazyload文档地址</a>
         </el-scrollbar>
       </div>
     </div>

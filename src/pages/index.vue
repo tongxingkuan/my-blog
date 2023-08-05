@@ -43,7 +43,7 @@ h1 {
     text-align: center;
     font-size: 80px;
     transform: scale(1);
-    transition: transform 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     &:hover {
       transform: scale(1.1);
     }
