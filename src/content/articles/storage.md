@@ -1,7 +1,7 @@
 ---
-title: "浏览器缓存"
+title: "cookie、sessionStorage、localStorage区别"
 description: "分析cookie、sessionStorage、localStorage的特点，使用场景"
-querys: ['缓存','cookie','sessionStorage','localStorage', 'sessionstorage', 'localstorage', 'storage']
+querys: ['cookie','sessionStorage','localStorage', 'sessionstorage', 'localstorage', 'storage']
 ---
 
 ## cookie、sessionStorage、localStorage 的那些事儿

@@ -41,7 +41,12 @@ h1 {
     height: 48%;
     box-sizing: border-box;
     text-align: center;
-    font-size: 40px;
+    font-size: 80px;
+    transform: scale(1);
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 </style>

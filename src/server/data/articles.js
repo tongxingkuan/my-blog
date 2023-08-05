@@ -59,4 +59,10 @@ export const articles = [
     tag: 'cache',
     desc: '浏览器缓存机制又名http缓存机制'
   },
+  {
+    name: '前端性能优化',
+    path: '/articles/performance',
+    tag: 'performance、前端性能优化',
+    desc: ''
+  },
 ];

@@ -1,4 +1,4 @@
-import { demos } from "../data/demos";
+import { demos } from "../../data/demos";
 
 const find = (pageSize, pageNum, tags) => {
   let page = parseInt(pageNum);
@@ -31,6 +31,6 @@ export default defineEventHandler(async (event) => {
   const query = await getQuery(event);
   return {
     demos: find(query.pageSize, query.pageNum, query.tags),
-    total: getTotal(query.tags),
+    total: getTotal(query.tags)
   };
 });

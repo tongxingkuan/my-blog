@@ -7,7 +7,7 @@ export const cachedApiConfig: CachedApiConfig[] = [
   },
   {
     url: '/api/demos',
-    noCache: false,
-    maxAge: 10
+    filePath: '/src/server/data/demos.js',
+    noCache: true
   }
 ]

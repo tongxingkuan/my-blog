@@ -6,7 +6,7 @@
         <nuxt-link :to="article.path" class="article-link">
           <span class="index">{{ index + 1 }}</span>
           <span class="title">{{ article.name }}</span>
-          <span class="seperator">——</span>
+          <span class="seperator" v-if="article.desc">——</span>
           <span class="desc">{{ article.desc }}</span>
         </nuxt-link>
       </li>
@@ -15,11 +15,11 @@
     <el-pagination
       v-model:current-page="pageNumRef"
       v-model:page-size="pageSizeRef"
-      :page-sizes="['10', '20', '30', '40', '50']"
+      :page-sizes="[10, 20, 30, 40, 50]"
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalRef"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange">
+      @size-change="getArticles"
+      @current-change="getArticles">
     </el-pagination>
   </div>
 </template>
@@ -40,14 +40,6 @@ const articlesRef = ref<article[]>([]);
 const pageNumRef = ref(1)
 const pageSizeRef = ref(10)
 const totalRef = ref(0)
-const handleSizeChange = (pageSize: number) => {
-  pageSizeRef.value = pageSize;
-  getArticles();
-};
-const handleCurrentChange = (current: number) => {
-  pageNumRef.value = current;
-  getArticles();
-}
 const route = useRoute();
 
 // 获取数据

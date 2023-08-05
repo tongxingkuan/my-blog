@@ -1,12 +1,12 @@
 ---
 title: "浏览器缓存机制"
 description: "强制缓存、协商缓存、理解浏览器的缓存机制减轻网络负载"
-querys: ['缓存机制','cache','no-cache','cache-control', 'modified', 'modify']
+querys: ['浏览器缓存', '缓存', '缓存机制','cache','no-cache','cache-control', 'modified', 'modify']
 ---
 
 ## 浏览器缓存机制
 
-浏览器缓存可以优化网络传输和减轻服务器负载，合理使用是[前端页面性能优化](/articles/performance)的有效方法之一。
+浏览器缓存可以优化网络传输和减轻服务器负载，合理使用是[前端页面性能优化](/articles/performance/#从网络请求入手)的有效方法之一。
 
 ### 强制缓存
 

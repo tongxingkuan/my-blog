@@ -25,23 +25,23 @@
     <el-pagination
       v-model:current-page="pageNumRef"
       v-model:page-size="pageSizeRef"
-      :page-sizes="['10', '20', '30', '40', '50']"
+      :page-sizes="[10, 20, 30, 40, 50]"
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalRef"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
+      @size-change="getDemos"
+      @current-change="getDemos"
     >
     </el-pagination>
   </div>
   <div class="all-demo-tags">
     <el-tag
       class="el-tag"
-      v-for="tag in tagListRef"
-      :key="tag"
-      :class="checkedTags.indexOf(tag) > -1 ? 'checked' : ''"
-      :color="getColor(tag)"
-      @click="changeSelect(tag)"
-      >{{ tag }}</el-tag
+      v-for="item in tagListRef"
+      :key="item.tag"
+      :class="checkedTags.indexOf(item.tag) > -1 ? 'checked' : ''"
+      :color="getColor(item.tag)"
+      @click="changeSelect(item.tag)"
+      >{{ item.tag + '(' + item.count + ')' }}</el-tag
     >
   </div>
 </template>
@@ -65,14 +65,7 @@ const totalRef = ref(0);
 const tagRef = ref("");
 const tagListRef = ref<any>([]);
 const checkedTags = ref<string[]>([]);
-const handleSizeChange = (pageSize: number) => {
-  pageSizeRef.value = pageSize;
-  getDemos();
-};
-const handleCurrentChange = (current: number) => {
-  pageNumRef.value = current;
-  getDemos();
-};
+const totalDemosRef = ref<Demo[]>([])
 
 const route = useRoute();
 
@@ -80,10 +73,12 @@ const tagColorMap = new Map([
   ["vue3", "#67c23a"],
   ["vue2", "#409eff"],
   ["nuxt3", "#e6a23c"],
+  ["js", "#f56c6c"],
+  ["library", "#909399"],
 ]);
 
 const getColor = (tagName: string) => {
-  return tagColorMap.get(tagName) || "#909399";
+  return tagColorMap.get(tagName) || "#303133";
 };
 
 const changeSelect = (tagName: string) => {
@@ -93,23 +88,16 @@ const changeSelect = (tagName: string) => {
   getDemos()
 };
 
-const getAllTags = (demos: Demo[] | undefined) => {
-  if (demos && demos.length > 0) {
-    let tags = new Set();
-    demos.forEach((demo) => {
-      let len = demo.tags.length;
-      let i = 0;
-      while (i < len) {
-        tags.add(demo.tags[i]);
-        i++;
-      }
-    });
-    tagListRef.value = tagListRef.value.concat(Array.from(tags));
-  }
+const getAllTags = async () => {
+  $fetch('/api/demos/alltag', {
+    method: 'GET'
+  }).then(res => {
+    tagListRef.value = res.tags;
+  })
 };
 
 // 获取数据
-const getDemos = (isInitial?: boolean) => {
+const getDemos = () => {
   $fetch("/api/demos", {
     method: "GET",
     params: {
@@ -118,14 +106,12 @@ const getDemos = (isInitial?: boolean) => {
       tags: checkedTags.value.length === 0 ? '' : JSON.stringify(checkedTags.value),
     },
   }).then((res) => {
-    if (isInitial) {
-      getAllTags(res.demos);
-    }
     demosRef.value = res.demos || [];
     totalRef.value = res.total;
   });
 };
-getDemos(true);
+getDemos()
+getAllTags()
 </script>
 <style lang="less" scoped>
 .demo-container {
