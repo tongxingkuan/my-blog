@@ -9,7 +9,7 @@ export const articles = [
     name: '面向对象',
     path: '/articles/oop',
     tag: '对象、原型、原型链、构造函数、封装、继承',
-    desc: '从自己创建一个对象，然后。。。。。。'
+    desc: '创建一个对象，然后。。。。。。'
   },
   {
     name: 'vue3源码解读',

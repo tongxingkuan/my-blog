@@ -382,18 +382,6 @@ select:-webkit-autofill {
   }
 }
 
-// 页面切换动画
-.page-enter-active,
-.page-leave-active {
-  transition: all 0.4s;
-}
-
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
-}
-
 @media (max-width: 960px) {
   .aside-left,
   .aside-right {
@@ -403,4 +391,9 @@ select:-webkit-autofill {
     width: calc(100% - 20px) !important;
     padding: 0 10px;
   }
+}
+
+.el-pagination {
+  padding-top: 20px;
+  justify-content: center;
 }

@@ -49,9 +49,11 @@
       <div class="title">第三方实现</div>
       <div class="container">
         <el-scrollbar>
-          <div v-for="i in arr" :key="i" class="image-content" v-lazy-container="{ selector: 'img', error: 'https://img.tukuppt.com/png_preview/00/08/20/SWFxnfT5Gv.jpg!/fw/780', loading: '/img/demos/lazyload/loading.gif' }">
+          <div v-for="i in arr" :key="i" class="image-content" v-lazy-container="{ selector: 'img'}">
             <img
               :data-src="'/img/demos/lazyload/' + i + '.jpg'"
+              data-error="https://img.tukuppt.com/png_preview/00/08/20/SWFxnfT5Gv.jpg!/fw/780"
+              data-loading="/img/demos/lazyload/loading.gif"
               :alt="i"
             />
           </div>
@@ -59,7 +61,7 @@
       </div>
       <div class="explain">
         <el-scrollbar>
-          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">vue-lazyload文档地址</a>
+          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">vue-lazyload文档地址</a>。阅读源码可以看出，该组件也是通过BoundingClientRect获取元素是否出现在视口，然后通过交叉观察器intersectionObserve来检测图片加载时机。相当于是对上述两种方式的综合应用。值得一提的是后面两种方式都需要指定图片的尺寸，否则在判断视口listener.checkInView()方法中会判定为所有图片均在视口中，也就不存在懒加载的概念了。
         </el-scrollbar>
       </div>
     </div>
@@ -173,6 +175,7 @@ onMounted(() => {
   jsUnLoadImageList.value = Array.from(jsRef.value.querySelectorAll("img"));
   asyncLoadImg();
   
+
   observeUnLoadImageList.value = Array.from(observerRef.value.querySelectorAll("img"));
   initIntersectionObserver()
 
@@ -234,6 +237,14 @@ onMounted(() => {
       padding: 5px;
       border-top: 1px solid #ccc;
     }
+  }
+}
+
+.lazyload-intersectionObserve,
+.lazyload-lib {
+  img {
+    height: 500px!important;
+    object-fit: cover!important;
   }
 }
 </style>

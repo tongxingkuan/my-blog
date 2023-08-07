@@ -74,7 +74,8 @@ const tagColorMap = new Map([
   ["vue2", "#409eff"],
   ["nuxt3", "#e6a23c"],
   ["js", "#f56c6c"],
-  ["library", "#909399"],
+  ["vue-lazyload", "#909399"],
+  ["交叉观察器", "rgb(170, 1, 221)"],
 ]);
 
 const getColor = (tagName: string) => {
@@ -155,6 +156,9 @@ getAllTags()
       }
     }
   }
+}
+:deep(.el-image__inner) {
+  object-fit: none;
 }
 :deep(.el-tag) {
   color: #fff;

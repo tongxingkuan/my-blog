@@ -8,7 +8,7 @@ export const demos = [
   {
     name: '图片懒加载',
     path: '/demos/lazyload',
-    source: '/img/demos/lazyload.png',
-    tags: ['js', 'library', '交叉观察器']
+    source: '/img/demos/lazyload/loading.gif',
+    tags: ['scroll', 'vue-lazyload', '交叉观察器']
   },
 ];

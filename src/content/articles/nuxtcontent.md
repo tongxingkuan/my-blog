@@ -8,9 +8,9 @@ querys: ["nuxt", "content"]
 
 ### 相关文档
 
-**nuxt/content** v2 版本是针对 **nuxt 3** 的一个模块库。引入 nuxt/content 后，可以参考 :c-link{name=nuxt3 文档-模块 href=https://57code.gitee.io/nuxt3-docs-zh/directory-structure/nuxt-config.html#%E6%9E%84%E5%BB%BA%E6%9C%9F%E6%A8%A1%E5%9D%97-buildmodules target=blank} 添加配置。
+**nuxt/content** v2 版本是针对 **nuxt 3** 的一个模块库。引入 nuxt/content 后，可以参考 :c-link{name=nuxt3文档-模块 href=https://57code.gitee.io/nuxt3-docs-zh/directory-structure/nuxt-config.html#%E6%9E%84%E5%BB%BA%E6%9C%9F%E6%A8%A1%E5%9D%97-buildmodules target=blank} 添加配置。
 
-本文章不是完整的 nuxt/content 文档，仅针对本项目中使用 nuxt/content 相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于 nuxt/content（以下简称 content）相关技术的讨论，如需了解本文对 nuxt3 的使用，请前往本博客文章 [nuxt3](/articles/nuxt3)。
+本文章不是完整的 nuxt/content 文档，仅针对本项目中使用 nuxt/content 相关技术的说明。了解更多可以参考 :c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。且本文章只是关于 nuxt/content（以下简称 content）相关技术的讨论。
 
 ### 特点
 
@@ -245,7 +245,7 @@ const show = () => {
 </style>
 ```
 
-内置组件就介绍这么多，更多内置组件可以去查阅 :c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。
+内置组件就介绍这么多，更多内置组件可以去查阅 :c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/navigation/fetch-content-navigation target=blank} 。
 
 #### 自定义组件
 
@@ -293,9 +293,9 @@ defineProps({
 单行组件以冒号（:）开头，组件名称可以用大写或者中横线（-）分隔，参数以花括号（{}）包裹，多个参数用空格分开
 
 ```markdown
-:c-link{name=vue3 官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+:c-link{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
 
-:CLink{name=vue3 官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
+:CLink{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}
 ```
 
 ###### 嵌套组件
@@ -701,7 +701,7 @@ watch(route, (newRoute) => {
 
 #### 组件配置问题
 
-:c-link{name=nuxt/content 官方文档 href=https://content.nuxtjs.org/examples/mdc/props target=blank} 有如下配置，设置如下 nuxt.config.ts 以后，部分组件无法正常使用
+:c-link{name=nuxt/content官方文档 href=https://content.nuxtjs.org/examples/mdc/props target=blank} 有如下配置，设置如下 nuxt.config.ts 以后，部分组件无法正常使用
 
 ```javascript
 components: {
@@ -838,4 +838,6 @@ onMounted(() => {
 
 :c-image-with-thumbnail{alt=路由跳转报错 src=/img/articles/question.png}
 
-解决方案：目前定位在layout中使用了element-plus组件导致，按照网上配置`ID_INJECTION_KEY`后同样有报错，暂定解决方案是在外层添加 _\<client-only\>_ 组件
+解决方案：目前定位在layout中使用了element-plus组件导致，按照网上配置`ID_INJECTION_KEY`后同样有报错，暂定解决方案有：
+1. 在外层添加 _\<client-only\>_ 组件；
+2. 还有一种办法是把`plugins/element-plus.ts`重命名为`element-plus.client.ts`，之后此插件只运行在客户端。
