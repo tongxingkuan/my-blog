@@ -480,13 +480,13 @@ new Vue(options).$mount("#app"); // vue2
 createApp(options).mount("#app"); // vue3
 ```
 
-该方法实际是调用 **ensureRenderer().createApp()** ，而 ensureRenderer 返回一个 **renderer** 对象，我们称之为渲染器对象；接下来我们看一下创建渲染器的逻辑。
+该方法实际是调用 **ensureRenderer().createApp()** ，而 ensureRenderer 返回一个 **renderer对象**，我们称之为渲染器对象；接下来我们看一下创建渲染器的逻辑。
 
 ##### createRenderer
 
 位置：_packages\runtime-core\src\renderer.ts_
 
-实际调用 **baseCreateRenderer** ，通过折叠代码发现此方法代码行数达两千行之多，此时不要担心，我们想一想前面的代码调用的是此方法返回的一个 api，所以我们直接定位到函数末尾，可以看到此方法的返回值是一个对象，也就是前文所说的 **renderer 对象** 。
+实际调用 **baseCreateRenderer** ，通过折叠代码发现此方法代码行数达两千行之多，此时不要担心，我们想一想前面的代码调用的是此方法返回的一个 api，所以我们直接定位到函数末尾，可以看到此方法的返回值是一个对象，也就是前面说的 **renderer对象** 。
 
 ```javascript
 return {
@@ -511,9 +511,12 @@ return function createApp(rootComponent, rootProps = null) {
 };
 ```
 
+再回到createApp方法定义：
+
 ```typescript
-// packages\runtime-dom\src\index.ts createApp
+// packages\runtime-dom\src\index.ts
 export const createApp = ((...args) => {
+  // 此处的app就是上面代码中的return app
   const app = ensureRenderer().createApp(...args)
 
   if (__DEV__) {
@@ -521,6 +524,7 @@ export const createApp = ((...args) => {
     injectCompilerOptionsCheck(app)
   }
 
+  // 扩展app.mount方法
   const { mount } = app
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
     const container = normalizeContainer(containerOrSelector)

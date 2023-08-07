@@ -61,7 +61,7 @@
       </div>
       <div class="explain">
         <el-scrollbar>
-          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">vue-lazyload文档地址</a>。阅读源码可以看出，该组件也是通过BoundingClientRect获取元素是否出现在视口，然后通过交叉观察器intersectionObserve来检测图片加载时机。相当于是对上述两种方式的综合应用。值得一提的是后面两种方式都需要指定图片的尺寸，否则在判断视口listener.checkInView()方法中会判定为所有图片均在视口中，也就不存在懒加载的概念了。
+          <a href="https://github.com/hilongjw/vue-lazyload#usage" target="_blank">vue-lazyload文档地址</a>。阅读源码可以看出，该组件也是通过BoundingClientRect获取元素是否出现在视口，然后对出现在视口的图片再注册交叉观察器IntersectionObserve，来检测图片加载时机。相当于是对上述两种方式的综合应用。值得一提的是后面两种方式都需要指定图片的尺寸，否则在判断视口listener.checkInView()方法中会判定为所有图片均在视口中，也就不存在懒加载的概念了。
         </el-scrollbar>
       </div>
     </div>

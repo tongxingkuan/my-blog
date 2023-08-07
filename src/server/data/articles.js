@@ -65,4 +65,10 @@ export const articles = [
     tag: 'performance、前端性能优化',
     desc: ''
   },
+  {
+    name: '闭包',
+    path: '/articles/closure',
+    tag: '闭包',
+    desc: '常用且抽象'
+  },
 ];
