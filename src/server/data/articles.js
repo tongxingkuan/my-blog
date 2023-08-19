@@ -63,12 +63,30 @@ export const articles = [
     name: '前端性能优化',
     path: '/articles/performance',
     tag: 'performance、前端性能优化',
-    desc: ''
+    desc: '前端技术的一次综合应用'
   },
   {
     name: '闭包',
     path: '/articles/closure',
     tag: '闭包',
     desc: '常用且抽象'
+  },
+  {
+    name: 'promise',
+    path: '/articles/promise',
+    tag: 'promise',
+    desc: '跳出异步回调嵌套地域'
+  },
+  {
+    name: '网络攻击与防范',
+    path: '/articles/xss',
+    tag: 'xss',
+    desc: ''
+  },
+  {
+    name: 'http',
+    path: '/articles/http',
+    tag: 'http、网络请求、状态码',
+    desc: '全方位解读http'
   },
 ];

@@ -290,22 +290,33 @@ select:-webkit-autofill {
   }
 
   ul:not(.el-pager, .article-list) {
-    padding: 0 20px 20px;
+    padding: 0 40px 20px;
     list-style: square;
     li {
       list-style: square;
       margin: 0.5rem 0;
       word-break: break-word;
+
+      ol {
+        padding: 0 40px 20px;
+        li {
+          list-style: decimal;
+        }
+      }
     }
   }
 
   ol {
-    padding: 0 20px 20px;
+    padding: 0 40px 20px;
     list-style: decimal;
     li {
       list-style: decimal;
       margin: 0.5rem 0;
       word-break: break-word;
+
+      ul {
+        list-style: square;
+      }
     }
   }
 

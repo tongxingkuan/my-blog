@@ -2,11 +2,11 @@
   <Title>文章</Title>
   <div>
     <ul v-if="articlesRef.length > 0" class="article-list">
-      <li v-for="(article, index) in articlesRef" :key="article.name" :title="article.name + '：' + article.desc">
+      <li v-for="(article, index) in articlesRef" :key="article.name" :title="article.name + (article.desc ? '：' + article.desc : '')">
         <nuxt-link :to="article.path" class="article-link">
           <span class="index">{{ index + 1 }}</span>
           <span class="title">{{ article.name }}</span>
-          <span class="seperator" v-if="article.desc">——</span>
+          <span class="seperator" v-if="article.desc">—</span>
           <span class="desc">{{ article.desc }}</span>
         </nuxt-link>
       </li>
@@ -44,13 +44,11 @@ const route = useRoute();
 
 // 获取数据
 const getArticles = () => {
-  let property: any = route.query.searchType;
   $fetch("/api/articles", {
     method: "GET",
     params: {
       pageSize: pageSizeRef.value,
       pageNum: pageNumRef.value,
-      [property]:  route.query.keywords
     },
   }).then(res => {
     articlesRef.value = res.articles || [];

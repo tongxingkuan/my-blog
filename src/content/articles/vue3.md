@@ -10,15 +10,12 @@ querys: ['vue', 'vue3', '源码']
 
 > :c-link{name=vue3官方文档 href=https://cn.vuejs.org/guide/introduction.html target=blank}：Vue 2 将于 2023 年 12 月 31 日停止维护。
 
-这使得我们学习 vue3 顺理成章，本文将通过解读 :c-link{name=vue3源码 href=https://github.com/vuejs/vue-next target=blank}，带领大家从入口到打包配置，再到浏览器调试、控制台日志等方方面面，来解读剖析一下 vue3 源码。中间也会穿插对比与 vue2 的实现差异。
-
-<br />
-
+本文将通过解读 :c-link{name=vue3源码 href=https://github.com/vuejs/vue-next target=blank}，从入口到打包配置，再到浏览器调试、控制台日志等方方面面，介绍一下源码的学习思路。
 ### 寻找入口文件
 
-要阅读项目源代码，特别是当项目目录较多，层次较深时，我们就要从入口文件入手，根据入口逐渐发散开来，期间要找准主线逻辑，切莫跑偏导致思绪混乱。现在的项目大多是基于 nodejs 开发，像这一类项目，找到 **package.json** 文件也就找到了项目的“身份证”。根据 **package.json** 的 scripts 中的指令，我们找到了 dev 指令所对应的文件路径及名称： **node scripts/dev.js** ，那么我们接下来就进入到该文件下一探究竟吧！
+要阅读项目源代码，特别是当项目目录较多，层次较深时，就要从入口文件入手，根据入口逐渐发散开来，期间要找准主线逻辑，切莫跑偏导致思绪混乱。现在的项目大多是基于 nodejs 开发，像这一类项目，找到 **package.json** 文件也就找到了项目的“身份证”。根据 **package.json** 的 scripts 中的指令，找到了 dev 指令所对应的文件路径及名称： **node scripts/dev.js** ，那么接下来就进入到该文件下一探究竟吧！
 
-当然 scripts 中的命令还有很多，且不是以 dev.js 作为入口，这个时候我们就要 **学会分清主线** ，何为主线，就是在不了解代码的前提下，先找准一个方向进行探究，期间的其他分支不要过分纠结，否则将会导致我们深陷支线，难以自拔，最终的结果就是放弃或从头再来。
+当然 scripts 中的命令还有很多，且不是以 dev.js 作为入口，这个时候就要 **学会分清主线** ，何为主线，就是在不了解代码的前提下，先找准一个方向进行探究，期间的其他分支不要过分纠结，否则将会导致深陷支线，难以自拔，最终的结果就是放弃或从头再来。
 
 #### scripts/build.js 文件解读
 
@@ -37,7 +34,7 @@ const inlineDeps = args.i || args.inline;
 const pkg = require(`../packages/${target}/package.json`);
 ```
 
-以上是截取的部分源码，在阅读该源码过程中，如果我们不知道某行代码的含义，这个时候，另一个调试工具可以很好的帮助我们，它就是 **console.log(desciprtion, somethingToPrint)** 。其中第一个参数可以让我们在众多的打印中快速找到我们要打印的内容。
+以上是截取的部分源码，在阅读该源码过程中，如果不知道某行代码的含义，这个时候，有一种常用的调试方式，它就是 **console.log(desciprtion, somethingToPrint)** 。其中`desciprtion`可以让在众多的打印中快速过滤出要打印的内容。
 
 ```javascript
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -50,21 +47,21 @@ const inlineDeps = args.i || args.inline;
 const pkg = require(`../packages/${target}/package.json`);
 ```
 
-通过阅读后续源码，我们知道 target 是输出文件目录（C:\Users\童年\Desktop\tongxk\core\packages\vue\dist），format 是代码打包格式（ **iife** :立即执行函数表达式）。最终使用 esbuild 模块将代码打包。那么打包工具是什么呢？
+通过阅读后续源码，知道 target 是输出文件目录（C:\Users\童年\Desktop\tongxk\core\packages\vue\dist），format 是代码打包格式，这里取值 `global` 。最终使用 `esbuild 模块` 将代码打包。那么打包工具是什么呢？
 
 ### 打包工具
 
 #### rollup(build.js)
 
-我们知道现在主流的打包工具有：[webpack](/#)、[rollup](/#)、[grunt](/#)；此博客将分章节讲述各种打包工具，并对比各个打包工具的优劣，此处不过多赘述。通过代码根目录下的 **rollup.config.js** 我们知道 vue3 项目源码采用 **rollup** 进行打包。而熟悉 vue2 源码的小伙伴都知道，vue2 采用的 webpack 打包，那么为什么要放弃 webpack 打包工具，采用 rollup 呢？
+知道现在主流的打包工具有：[webpack](/articles/package#webpack)、[rollup](/articles/package#rollup)、[grunt](/articles/package#grunt)等等；有专门的文章介绍各种打包工具，并对比各个打包工具的优劣，此处不过多赘述。通过代码根目录下的 **rollup.config.js** 知道 vue3 项目源码采用 **rollup** 进行打包。而 `vue2 源码` 采用的 `webpack 打包` ，那么为什么要放弃 webpack 打包工具，采用 rollup 呢？
 
-> 在 vue2 中，打包采用的是 webpack，而到了 vue3 中打包就变成了 rollup，而且不仅仅 vue3 采用了 rollup 来打包，react 也从 webpack 到 rollup 转变了。那么 rollup 打包工具是不是要比 webpack 打包要好呢？其实各自有各自的用途，我们通过对比 vue2 和 vue3 的一些用法就可以简单的看出来两者打包工具的一些区别，vue3 最大的一个特性就说采用了组合式 API，简单来说 vue2 更多的像一个百宝箱，我们可以开箱即用，而 vue3 更多的是提供一些基础功能，然后让使用者去选择，灵活使用。两者打包工具各自有各自的好处，就像一句话说的"webpack 是大而全，rollup 是小而美"。首先相对于 webpack 来说 rollup 更加轻量级，同时 rollup 是一个 JS 模块打包器，更适合于 JS 库打包，而 webpack 更适合的是大型项目。
+> 在 vue2 中，打包采用的是 webpack，而到了 vue3 中打包就变成了 rollup，而且不仅仅 vue3 采用了 rollup 来打包，react 也从 webpack 到 rollup 转变了。那么 rollup 打包工具是不是要比 webpack 打包要好呢？其实各自有各自的用途，通过对比 vue2 和 vue3 的一些用法就可以简单的看出来两者打包工具的一些区别，vue3 最大的一个特性就说采用了组合式 API，简单来说 vue2 更多的像一个百宝箱，可以开箱即用，而 vue3 更多的是提供一些基础功能，然后让使用者去选择，灵活使用。两者打包工具各自有各自的好处，就像一句话说的"webpack 是大而全，rollup 是小而美"。首先相对于 webpack 来说 rollup 更加轻量级，同时 rollup 是一个 JS 模块打包器，更适合于 JS 库打包，而 webpack 更适合的是大型项目。
 
 > 版权声明：本文为 CSDN 博主「BUG 不加糖」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。[原文链接](https://blog.csdn.net/YX0711/article/details/129202476)
 
 归结来说就是 rollup 更轻量，更契合 vue3 灵活性的特点。以上说明了一下 vue3 打包工具以及为什么采用 rollup 打包。
 
-但是其实这一小节说的 rollup 打包实际上并未在 dev 命令的后续中使用到，因为在 **scripts/dev.js** 有这么一段打包代码，对比 **scripts/build.js** 中的打包代码不难发现，运行 **yarn dev** 并不会采用 rollup 打包方式，而是采用的 **esbuild 打包方式** 。之所以在这里提到 rollup 是因为我们常用的还是 build 构建方式生成的包才是大多数脚手架工具采用的依赖包，而 dev 构建方式只是生成一个 **dist\vue.global.js** 文件，在现在的应用场景相对较少。
+但是其实这一小节说的 rollup 打包实际上并未在 dev 命令的后续中使用到，因为在 **scripts/dev.js** 有这么一段打包代码，对比 **scripts/build.js** 中的打包代码不难发现，运行 **yarn dev** 并不会采用 rollup 打包方式，而是采用的 **esbuild 打包方式** 。之所以在这里提到 rollup 是因为常用的还是 build 构建方式的产物才是大多数脚手架工具采用的依赖包，而 dev 构建方式只是生成一个 **dist/vue.global.js** 文件，然后通过`<script>`标签引入，在现在的应用场景相对较少。
 
 ```javascript
 // dev.js
@@ -125,11 +122,11 @@ await execa(
 
 #### esbuild(dev.js)
 
-此处我们又接触了一个新的打包工具，[**esbuild**](/#) ，esbuild 特点是打包速度快，本文不作赘述。之所以要用 esbuild 打包而不是 rollup，我想有两点原因：一是打包速度快，二是可以启动本地服务，在监听模式下文件发生变化重新编译。这两点契合了开发调试的需求，所以采用此打包工具。
+此处又接触了一个新的打包工具 — [esbuild](/articles/package#esbuild) 。之所以要用 esbuild 打包而不是 rollup，我想有两点原因：一是打包速度快，二是可以启动本地服务，在监听模式下文件发生变化重新编译。这两点契合了边开发边调试的需求。
 
 ### 开始打包
 
-至此我们还只是解析出了命令并生成打包配置，真正的打包现在正式开始。我们在 scripts/dev.js 文件中看到了这样一段代码：
+至此还只是解析出了命令并生成打包配置，真正的打包现在正式开始。在 scripts/dev.js 文件中看到了这样一段代码：
 
 ```javascript
 esbuild
@@ -165,7 +162,7 @@ esbuild
   .then((ctx) => ctx.watch());
 ```
 
-分析可知，**entryPoints** 为入口文件地址：_packages/vue/src/index.ts_ ，**outfile** 声明输出文件地址：_/packages/vue/dist/vue.global.js_ 。接下来，我们来分析一下入口文件、输出文件。
+分析可知，**entryPoints** 为入口文件地址：_packages/vue/src/index.ts_ ，**outfile** 声明输出文件地址：_/packages/vue/dist/vue.global.js_ 。接下来，来分析一下入口文件、输出文件。
 
 #### 入口文件
 
@@ -448,6 +445,10 @@ $ mkdir packages/vue/examples/test.html
 
 快速定位文件位置 <kbd>ctrl</kbd> + <kbd>shfit</kbd> + <kbd>p</kbd>、展开代码 <kbd>ctrl</kbd> + <kbd>k</kbd> + <kbd>j</kbd> 、 折叠代码 <kbd>ctrl</kbd> + <kbd>k</kbd> + <kbd>0</kbd> 、转到方法定义 <kbd>ctrl</kbd> + <kbd>t</kbd> ；
 
+##### liveServer
+
+一个具有实时加载功能的小型服务器，可以使用它来检测html/css/javascript文件的变化，但是不能用于部署最终站点。也就是说可以在项目中实时用 `live-server` 作为一个实时服务器实时查看开发的网页或项目效果。
+
 ##### 日志、断点跟踪
 
 **debugger** ，**console.log()**
@@ -455,10 +456,6 @@ $ mkdir packages/vue/examples/test.html
 ##### 浏览器调用栈
 
 :c-image-with-thumbnail{alt=callStack src=/img/articles/callStack.png}
-
-##### 浏览器扩展
-
-**vue.js devtools**
 
 ### 探索源码
 
@@ -480,13 +477,13 @@ new Vue(options).$mount("#app"); // vue2
 createApp(options).mount("#app"); // vue3
 ```
 
-该方法实际是调用 **ensureRenderer().createApp()** ，而 ensureRenderer 返回一个 **renderer对象**，我们称之为渲染器对象；接下来我们看一下创建渲染器的逻辑。
+该方法实际是调用 **ensureRenderer().createApp()** ，而 ensureRenderer 返回一个 **renderer对象**，称之为渲染器对象；接下来看一下创建渲染器的逻辑。
 
 ##### createRenderer
 
 位置：_packages\runtime-core\src\renderer.ts_
 
-实际调用 **baseCreateRenderer** ，通过折叠代码发现此方法代码行数达两千行之多，此时不要担心，我们想一想前面的代码调用的是此方法返回的一个 api，所以我们直接定位到函数末尾，可以看到此方法的返回值是一个对象，也就是前面说的 **renderer对象** 。
+实际调用 **baseCreateRenderer** ，通过折叠代码发现此方法代码行数达两千行之多，此时不要担心，想一想前面的代码调用的是此方法返回的一个 api，所以直接定位到函数末尾，可以看到此方法的返回值是一个对象。
 
 ```javascript
 return {
@@ -496,7 +493,7 @@ return {
 };
 ```
 
-根据主线逻辑，我们开始分析 **createAppAPI** 方法。
+继续主线逻辑，开始分析 **createAppAPI** 方法。
 
 ###### createAppAPI
 
@@ -566,7 +563,7 @@ export const createApp = ((...args) => {
 }) as CreateAppFunction<Element>
 ```
 
-以上代码只保留了部分关键代码，可以看出，**createAppAPI** 返回了一个方法，**createApp**， 再回到 _packages\runtime-dom\src\index.ts_ 中的 createApp 方法，我们拿到了一个 app 对象，该对象就是 **vue 实例对象** 。至此我们知道了 createApp 就是创建了一个 vue 实例对象，之后调用实例对象的 **mount** 方法。
+以上代码只保留了部分关键代码，可以看出，**createAppAPI** 返回了一个方法，**createApp**， 再回到 _packages\runtime-dom\src\index.ts_ 中的 createApp 方法，拿到了一个 app 对象，该对象就是 **vue 实例对象** 。至此知道了 createApp 就是创建了一个 vue 实例对象，之后调用实例对象的 **mount** 方法。
 
 #### 初始化过程
 
@@ -666,11 +663,11 @@ app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
 
 :c-text{dir=center text=以下简称第二层mount}
 
-如果你认为 **createApp({}).mount('#app')** 方法就是执行第一层 mount 方法，那就错了，其实在 _packages\runtime-dom\src\index.ts_ createaApp 方法中，还有第二层 mount。首先巧妙的提取出了实例对象上的第一层 mount 方法，之后通过 app.mount 重写了 mount 方法，并在第二层 mount 方法中又调用了第一层 mount 方法。这种巧妙的书写方法可以让我们在调用第一层 mount 方法以前，对参数进行处理，或者是根据不同的场景差异化参数，类似“重载”的实现方式。之所以“重载”mount是为了实现跨平台。其实如果进行浏览器调试进行断点跟踪，也能发现上述问题，因为 test.html 中 mount 的参数为 _#app_ ，而实际在 mount 断点处，发现参数已经变为 DOM 元素，也就是说在这两者之间一定还有其他操作将选择器转换为了对应的 DOM 元素。
+如果你认为 **createApp({}).mount('#app')** 方法就是执行第一层 mount 方法，那就错了，其实在 _packages\runtime-dom\src\index.ts_ createaApp 方法中，还有第二层 mount。首先巧妙的提取出了实例对象上的第一层 mount 方法，之后通过 app.mount 重写了 mount 方法，并在第二层 mount 方法中又调用了第一层 mount 方法。这种巧妙的书写方法可以让在调用第一层 mount 方法以前，对参数进行处理，或者是根据不同的场景差异化参数，类似“重载”的实现方式。之所以“重载”mount是为了实现跨平台。其实如果进行浏览器调试进行断点跟踪，也能发现上述问题，因为 test.html 中 mount 的参数为 _#app_ ，而实际在 mount 断点处，发现参数已经变为 DOM 元素，也就是说在这两者之间一定还有其他操作将选择器转换为了对应的 DOM 元素。
 
 ##### 浏览器调试
 
-浏览器调试可以方便我们在代码多，分支复杂的情况下带领我们去按照执行步骤理清脉络，也可以帮助我们迅速定位问题所在位置。首先我们添加如下代码，然后重新运行 **pnpm dev**，此时会重新打包构建，并生成 vue.global.js，之后我们通过 **liveServer** 在浏览器运行 test.html 并查看效果。**F12** 打开控制台，刷新页面，可以看到控制台命中断点。
+浏览器调试可以方便在代码多，分支复杂的情况下带领去按照执行步骤理清脉络，也可以帮助迅速定位问题所在位置。首先添加如下代码，然后重新运行 **pnpm dev**，此时会重新打包构建，并生成 vue.global.js，之后通过 **liveServer** 在浏览器运行 test.html 并查看效果。**F12** 打开控制台，刷新页面，可以看到控制台命中断点。
 
 ```javascript
 ...
@@ -680,12 +677,12 @@ if (!isMounted) {
   ...
 ```
 
-命中断点以后，我们可以在 **callStack** 中查看调用链，因此也就知道了 **mount** 方法的上一个调用是在 **app.mount** 中。
+命中断点以后，可以在 **callStack** 中查看调用链，因此也就知道了 **mount** 方法的上一个调用是在 **app.mount** 中。
 
 :c-image-with-thumbnail{alt=callStack src=/img/articles/callStack.png}
 
 
-接下来我们继续往下走，单步调试快捷键 **F10** ，进入方法快捷键 **F11** ，我们注意到以下代码：
+接下来继续往下走，单步调试快捷键 **F10** ，进入方法快捷键 **F11** ，注意到以下代码：
 
 ```typescript
 const vnode = createVNode(rootComponent, rootProps);
@@ -695,14 +692,49 @@ const vnode = createVNode(rootComponent, rootProps);
 
 ##### createVNode
 
-位置：_packages\runtime-core\src\apiCreateApp.ts_
+位置：_packages\runtime-core\src\vnode.ts_
 
-断点进入此方法，可以发现此方法也是由方法 **createVNodeWithArgsTransform** 所返回的，可以发现[闭包](/#)在 vue 源码中或者说大多数框架源码中被运用的场景非常多，此博客也会专门出一篇文章来讨论一下这个概念。从返回值可以看出，接下来进入到了 **\_createVNode** 方法。先按最简单的来，此处我们传入的参数 **type** 如下：
+```ts
+export const createVNode = (
+  __DEV__ ? createVNodeWithArgsTransform : _createVNode
+) as typeof _createVNode
+```
+
+断点进入此方法，可以发现此方法也是由方法 **createVNodeWithArgsTransform** 所返回的。
+
+```ts
+const createVNodeWithArgsTransform = (
+  ...args: Parameters<typeof _createVNode>
+): VNode => {
+  return _createVNode(
+    ...(vnodeArgsTransformer
+      ? vnodeArgsTransformer(args, currentRenderingInstance)
+      : args)
+  )
+}
+```
+
+从返回值可以看出，接下来进入到了 **\_createVNode** 方法。
+
+```ts
+// ...
+return createBaseVNode(
+    type,
+    props,
+    children,
+    patchFlag,
+    dynamicProps,
+    shapeFlag,
+    isBlockNode,
+    true
+  )
+```
+
+继续主线逻辑，断点到达此处后，传入的参数 `type` 如下：
 
 :c-image-with-thumbnail{alt=type src=/img/articles/type.png}
 
 最终通过**createBaseVNode**方法创建并返回 vnode。
-
 ##### vnode
 
 位置：_packages/runtime-core/src/vnode.ts_
@@ -711,6 +743,7 @@ const vnode = createVNode(rootComponent, rootProps);
 > :c-link{name=原文链接 href=https://ustbhuangyi.github.io/vue-analysis/v2/data-driven/virtual-dom.html target=blank}
 
 ```typescript
+// createBaseVNode
 const vnode = {
   __v_isVNode: true,
   __v_skip: true,
@@ -786,19 +819,19 @@ if (__COMPAT__) {
 return vnode;
 ```
 
-可以看到 vnode 节点有茫茫多的属性，我们不用去一一深究每个属性代表的含义，而是在用到的时候逐个去分析，这样由点逐面，最终当你彻底理解 vnode 每个属性的含义以及运作机制之后，那么恭喜你，vue3 源码也就掌握的差不多了。
+可以看到 vnode 节点有茫茫多的属性，不用去一一深究每个属性代表的含义，而是在用到的时候逐个去分析，这样由点逐面，最终当彻底理解 vnode 每个属性的含义以及运作机制之后，那么 vue3 源码也就掌握的差不多了。
 
 ##### render
 
 位置：_packages\runtime-core\src\renderer.ts_
 
-回到主线，我们生成了一个 vnode，接下来将 vnode 作为参数传到**render**函数中
+回到主线，生成了一个 vnode，接下来将 vnode 作为参数传到**render**函数中
 
 ```typescript
 render(vnode, rootContainer, isSVG);
 ```
 
-先不考虑 isSVG，**rootContainer**对应根节点，而**vnode.type.template** 对应根节点的 innerHTML。然后来看看 render 方法，此处的 render 向上溯源发现是 **createAppAPI** 的参数，而 **createAppAPI** 方法又是由 **createRenderer** 方法调用并传入了 render 参数。那我们就回到 **createRenderer** 方法，原来是那个两千多行代码的方法，我们依旧只看我们需要的部分：
+先不考虑 isSVG，**rootContainer**对应根节点，而**vnode.type.template** 对应根节点的 innerHTML。然后来看看 render 方法，此处的 render 向上溯源发现是 **createAppAPI** 的参数，而 **createAppAPI** 方法又是由 **createRenderer** 方法调用并传入了 render 参数。那就回到 **createRenderer** 方法，原来是那个两千多行代码的方法，依旧只看需要的部分：
 
 ```typescript
 const render: RootRenderFunction = (vnode, container, isSVG) => {
@@ -815,7 +848,7 @@ const render: RootRenderFunction = (vnode, container, isSVG) => {
 };
 ```
 
-从 render 代码可以知道，patch 执行完后才会将当前 vnode 赋值给 **container.\_vnode** OK，这样我们就可以带着参数去分析一下这段代码，首先 vnode 不为 null，方法执行到了 **patch** 中：
+从 render 代码可以知道，patch 执行完后才会将当前 vnode 赋值给 **container.\_vnode** OK，这样就可以带着参数去分析一下这段代码，首先 vnode 不为 null，方法执行到了 **patch** 中：
 
 ##### patch
 
@@ -941,7 +974,7 @@ const patch: PatchFn = (
 };
 ```
 
-我们的断点走到此处，第一个参数（n1）为 null，第二个参数（n2）就是前面创建的 vnode，第三个参数（container）就是根节点 DOM 元素。此处留下一个问题，该函数参数在初始化只用到了第二、三个参数，以后还有什么场景会调用 patch？到那时传参如何？还记得**n2.type**吗，这里就判断了该值，明显进入了 default 分支。此时再记住一个属性，**shapeFlag** ，该值的判断方式：
+的断点走到此处，第一个参数（n1）为 null，第二个参数（n2）就是前面创建的 vnode，第三个参数（container）就是根节点 DOM 元素。此处留下一个问题，该函数参数在初始化只用到了第二、三个参数，以后还有什么场景会调用 patch？到那时传参如何？还记得**n2.type**吗，这里就判断了该值，明显进入了 default 分支。此时再记住一个属性，**shapeFlag** ，该值的判断方式：
 
 ```typescript
 // 博主注： packages/runtime-core/src/vnode.ts
@@ -975,7 +1008,7 @@ export const enum ShapeFlags {
 }
 ```
 
-显然，shapeFlag 会根据 **type** _（注意此处的 type 值等于 vnode.type，但并不是真正的 vnode.type，因为此时 vnode 还没创建）_ 的值，我们知道对应取**ShapeFlags.STATEFUL_COMPONENT**，也就是 4。**<<** 为左移运算符，**|** 为按位或。_我们一般在底层代码使用位运算符的方式枚举，可以提高程序性能；业务层代码还是使用数字枚举方式，提升代码可读性。_
+显然，shapeFlag 会根据 **type** _（注意此处的 type 值等于 vnode.type，但并不是真正的 vnode.type，因为此时 vnode 还没创建）_ 的值，知道对应取**ShapeFlags.STATEFUL_COMPONENT**，也就是 4。**<<** 为左移运算符，**|** 为按位或。_一般在底层代码使用位运算符的方式枚举，可以提高程序性能；业务层代码还是使用数字枚举方式，提升代码可读性。_
 
 回到主线，此时方法来到了 **processComponent** 中。
 
@@ -1024,7 +1057,7 @@ const processComponent = (
 
 该方法中首先判断 n1 如果为 null，也就是前面的 **container.\_vnode** 为 undefined。其次又判断是否是 **keep_alive 组件** 。初始化过程执行到了 **mountComponent** 方法中。
 
-同时我们再多看一步，那就是如果 n1 不为 null 的时候，将会进入 **updateComponent** 方法中，该方法先按下不表，也就是说初始化 patch 完成后，将会给 **container.\_vnode** 赋值，之后更新过程中执行到此方法，n1 将不再是 null，而是上一次初始化过程中创建的 vnode。
+同时再多看一步，那就是如果 n1 不为 null 的时候，将会进入 **updateComponent** 方法中，该方法先按下不表，也就是说初始化 patch 完成后，将会给 **container.\_vnode** 赋值，之后更新过程中执行到此方法，n1 将不再是 null，而是上一次初始化过程中创建的 vnode。
 
 ##### mountComponent
 
@@ -1245,7 +1278,7 @@ export function finishComponentSetup(
 }
 ```
 
-不同于vue2源码的是，_vue2是直接在代码里声明的方法：**compileToFunction**_，而vue3的实现比较巧妙：我们首先看下**compile**函数是如何生成的：
+不同于vue2源码的是，_vue2是直接在代码里声明的方法：**compileToFunction**_，而vue3的实现比较巧妙：首先看下**compile**函数是如何生成的：
 
 ```typescript
 // 博主注：packages\runtime-core\src\component.ts
@@ -1553,7 +1586,7 @@ const setupRenderEffect: SetupRenderEffectFn = (
  const subTree = (instance.subTree = renderComponentRoot(instance))
 ```
 
-我们知道代码执行到这儿已经生成了render函数，那么接下来应该就是执行render函数了。要知道subTree是什么就要知道render函数到底返回的什么。通过观察**normalizeVNode**的入参，render函数返回的就是一个虚拟的DOM树，该树的根节点是一个type为 **Symbol(v-fgt)** 的Fragment。
+知道代码执行到这儿已经生成了render函数，那么接下来应该就是执行render函数了。要知道subTree是什么就要知道render函数到底返回的什么。通过观察**normalizeVNode**的入参，render函数返回的就是一个虚拟的DOM树，该树的根节点是一个type为 **Symbol(v-fgt)** 的Fragment。
 
 接下来就是通过patch将子树vnode挂载到container中，此时n1为null，n2就是子树vnode，它的 **shapeFlag** 为16。此时分支进入到 **processFragment** 方法中。
 
