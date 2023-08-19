@@ -8,7 +8,7 @@ querys: ['Promise', 'promise', '同步', '异步']
 
 Promise是`异步微任务`，解决了异步多层回调嵌套的问题，使代码可读性更高，更容易维护。
 
-### js运行机制
+### 事件循环（Event Loop）
 
 js中任务分为同步和异步，对于`同步任务`，按照顺序执行；对于`异步任务`，在同步任务执行完后才开始执行，异步任务按照优先级也分`宏任务`和`微任务`。
 
@@ -247,3 +247,35 @@ console.log(4)
 ```
 
 `await`解决了异步回调嵌套的问题，提升了代码的可阅读性。
+
+### 面试题
+
+```js
+async function async1() {
+    console.log('1');       // sync
+    await async2();
+    console.log('2');       // microTask
+}
+
+async function async2() {
+    console.log('3');       // sync
+}
+
+console.log('4');           // sync
+async1();
+
+setTimeout(() => {
+    console.log('5');       // macroTask
+}, 0)
+
+new Promise((resolve, reject) => {
+    console.log('6');       // sync
+    resolve();
+}).then(() => {
+    console.log('7');       // microTask
+})
+
+console.log('8');           // sync
+```
+
+首先为每一句代码打上注释可以帮助分析，理清顺序。然后按照执行顺序，依次打印： 4 1 3 6 8 2 7 5

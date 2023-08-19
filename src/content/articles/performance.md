@@ -106,6 +106,10 @@ options配置参考 :c-link{name=critters href=https://github.com/alan-agius4/cr
 
 可以减少网络请求次数。参考 :c-link{name=PS制作教程 href=http://www.cdcxhl.com/news/240101.html target=blank}
 
+#### 预加载资源
+
+参考文章 [你不知道的link标签用法](/articles/link)
+
 #### 代码优化
 
 分离第三方代码；提取公用代码；遵循编程规范；垃圾回收，定时器清理等
