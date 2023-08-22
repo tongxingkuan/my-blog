@@ -17,7 +17,7 @@ querys: ['快速排序', '冒泡排序', '选择排序', '希尔排序', '归并
 function quickSort(arr) {
   let len = arr.length
   if (len <= 1) return arr
-  let spliceIndex = Math.floor(len / 2)
+  let spliceIndex = Math.floor(len / 2) // 位置任意，此处取中间
   let compareItem = arr.splice(spliceIndex, 1)[0]
   let left = []
   let right = []
