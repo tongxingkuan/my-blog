@@ -841,3 +841,52 @@ onMounted(() => {
 解决方案：目前定位在layout中使用了element-plus组件导致，按照网上配置`ID_INJECTION_KEY`后同样有报错，暂定解决方案有：
 1. 在外层添加 _\<client-only\>_ 组件；
 2. 还有一种办法是把`plugins/element-plus.ts`重命名为`element-plus.client.ts`，之后此插件只运行在客户端。
+
+
+#### 编写md文件时，当引用链接中有 = 符号时，导致组件无法正常使用
+
+问题代码如下：
+
+```md
+参考文章 :c-link{href=https://mp.weixin.qq.com/s?__biz=MzU2MjAzNTQ1Mw==&mid=2247485318&idx=1&sn=485203c0357800ef1da363e3fdcf6346&chksm=fc6ee814cb1961023ddccfc313fecdbe6bdb1bae55517c6f97dcd03c2c1ff242081605f72a82&scene=27 target=blank name=HTTP2的特性解析}
+```
+
+改造 `CLink` 组件，将href修改为计算属性，获取 `decodeURIComponent` 之后的链接地址。
+
+改造后的 `CLink` 代码：
+
+```vue
+<template>
+  <a :href="isEncode ? computedHref : href" :target="'_' + target">{{ name }}</a>
+</template>
+<script setup>
+const { href } = defineProps({
+  name: {
+    type: String,
+    default: ''
+  },
+  href: {
+    type: String,
+    default: '#'
+  },
+  target: {
+    type: String,
+    default: 'self'
+  },
+  isEncode: {
+    type: Boolean,
+    default: false
+  }
+})
+const computedHref = computed(() => {
+  return decodeURIComponent(href)
+})
+</script>
+```
+
+改造后的组件引用方式：
+
+```md
+:c-link{href=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzU2MjAzNTQ1Mw%3D%3D%26mid%3D2247485318%26idx%3D1%26sn%3D485203c0357800ef1da363e3fdcf6346%26chksm%3Dfc6ee814cb1961023ddccfc313fecdbe6bdb1bae55517c6f97dcd03c2c1ff242081605f72a82%26scene%3D27 target=blank name=HTTP2的特性解析 isEncode=true}
+```
+

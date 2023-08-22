@@ -9,7 +9,7 @@ export default defineNuxtConfig({
         searchDepth: 5,
       },
       anchorLinks: {
-        depth: 5,
+        depth: 6,
         exclude: [1]
       },
     },

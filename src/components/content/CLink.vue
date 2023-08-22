@@ -1,8 +1,8 @@
 <template>
-  <a :href="href" :target="'_' + target">{{ name }}</a>
+  <a :href="isEncode ? computedHref : href" :target="'_' + target">{{ name }}</a>
 </template>
 <script setup>
-defineProps({
+const { href } = defineProps({
   name: {
     type: String,
     default: ''
@@ -14,6 +14,13 @@ defineProps({
   target: {
     type: String,
     default: 'self'
+  },
+  isEncode: {
+    type: Boolean,
+    default: false
   }
+})
+const computedHref = computed(() => {
+  return decodeURIComponent(href)
 })
 </script>

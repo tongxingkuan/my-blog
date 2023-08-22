@@ -88,7 +88,7 @@ options配置参考 :c-link{name=critters href=https://github.com/alan-agius4/cr
 
 #### 使用 http2
 
-参考文章 [网络请求](/articles/http/#http2)
+参考文章 [http](/articles/http/#http2)
 
 #### SSR
 
@@ -98,7 +98,7 @@ options配置参考 :c-link{name=critters href=https://github.com/alan-agius4/cr
 
 #### 懒加载
 
-参考 [图片懒加载实现](/demos/lazyload)
+常见的懒加载有图片懒加载，即图片出现在视口才开始请求，参考 [图片懒加载实现](/demos/lazyload)；表格数据懒加载，通过分页实现（参考本博客文章列表实现）；路由懒加载；异步组件等方式。
 
 ### 从资源本身入手
 
