@@ -6,11 +6,11 @@ querys: ['面试题', '面试', '知识点']
 
 ## 面试题
 
-###### Event Loop
+### Event Loop
 
 事件循环。_js是单线程_，同一时间只能做一件事儿，如果有多个任务要执行，就要排队，排队也有优先级的划分，按照执行顺序依次是 _同步任务 - 异步微任务 - 异步宏任务_ ，在执行完第一梯队优先级的任务后，回过头来处理下一优先级的任务，在执行任务的同时又会有新的任务加入到队列中，将根据优先级放入对应的执行队列，这样循环往复，执行完所有的事件，这就是事件循环。用现实场景来举例的话，就像是去柜台办理业务要取号，客户又分vip和普通客户，vip客户直接进小房间，如果同时有两个vip用户，按照到来的先后顺序接待。参考文章 [promise-事件循环](/articles/promise#事件循环event-loop)
 
-###### Generator
+### Generator
 
 `ES6` 新增特性函数，可以被暂停和恢复，在调用Generator函数时，不会立即执行，而是返回一个可暂停执行的Generator对象，之后调用该对象的 `.next()` 方法，恢复函数的执行。使得我们能够编写更加灵活和更具表现力的代码。
 
@@ -45,7 +45,7 @@ async function test() {
 test() // 1 2 3
 ```
 
-###### Map 和 Object
+### Map 和 Object
 
 Map的原型链最终指向Object，所以Map本质也是一个对象，但是它和Object也有一些重要的区别：
 
@@ -87,4 +87,22 @@ function JsonParseToMap(str) {
   return stringToMap
 }
 ```
+
+### git merge 和 git rebase
+
+#### 使用场景
+
+`merge` 命令一般用于将开发分支、热修复分支等合并到主分支上，因为该命令`不会修改分支的历史信息`，只会增加新节点，非常适合`主分支`这种`稳定性`且需要用于版本控制的分支上。
+
+`rebase` 命令一般用于将主分支的新提交记录，合并到正在进行开发任务或修复任务的分支上，因为该命令能保证开发分支的历史与主分支的历史保持一致，从而减少污染性。
+
+#### 操作步骤
+
+1. 通过`git stash`，将自己开发分支的代码保存到暂存区中，恢复本地仓库到修改前的状态
+2. `git checkout master`进入主分支，`git pull`拉取master的最新commits（提交记录）
+3. `git checkout myDev`进入开发分支，通过`git rebase master`将master最新的提交，合并到自己的开发分支上， 保证该分支的历史提交与master相同
+4. `git stash pop`将自己的修改取出；git commit、git push提交到远程开发分支上
+5. 切换到master分支下，然后发起 `git merge myDev` 请求，将分支myDev合并到master分支
+
+
 
