@@ -104,5 +104,54 @@ function JsonParseToMap(str) {
 4. `git stash pop`将自己的修改取出；git commit、git push提交到远程开发分支上
 5. 切换到master分支下，然后发起 `git merge myDev` 请求，将分支myDev合并到master分支
 
+### 寻找数组第K大元素
 
+改造冒泡排序：
 
+```js
+function findK(k, arr) {
+    if (k >= arr.length) return
+    for (let i = 0; i < k; i++) {
+        for (let j = 0; j < arr.length - 1 - i; j++) {
+            if (arr[j + 1] < arr[j]) {
+                let temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            }
+        }
+        console.log(arr)
+    }
+    return arr[arr.length - k]
+}
+```
+
+运行结果如下：
+
+:c-image-with-thumbnail{alt=冒泡排序 src=/img/articles/bubbleSort.png}
+
+改造选择排序：
+
+```js
+function findK(k, arr) {
+  let len = arr.length
+  if (k > len) return
+  let temp, maxIndex
+  for (let i = 0; i < k; i++) {
+    maxIndex = i
+    for (let j = i + 1; j < len; j++) {
+      if (arr[j] > arr[maxIndex]) {
+        maxIndex = j    // 找到最小数的索引
+      }
+    }
+    temp = arr[i]
+    arr[i] = arr[maxIndex]
+    arr[maxIndex] = temp
+    console.log(arr)
+  }
+  return arr[k - 1]
+}
+```
+
+运行结果如下：
+
+:c-image-with-thumbnail{alt=选择排序 src=/img/articles/selectionSort.png}
