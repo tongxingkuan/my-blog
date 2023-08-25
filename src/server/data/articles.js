@@ -71,4 +71,16 @@ export const articles = [
     name: '数组排序算法',
     path: '/articles/sort',
   },
+  {
+    name: 'Diff算法',
+    path: '/articles/diff',
+  },
+  {
+    name: '微前端',
+    path: '/articles/microFront',
+  },
+  {
+    name: '前端模块化',
+    path: '/articles/module',
+  },
 ];

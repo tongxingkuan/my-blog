@@ -2,12 +2,10 @@
   <Title>文章</Title>
   <div>
     <ul v-if="articlesRef.length > 0" class="article-list">
-      <li v-for="(article, index) in articlesRef" :key="article.name" :title="article.name + (article.desc ? '：' + article.desc : '')">
+      <li v-for="(article, index) in articlesRef" :key="article.name" :title="article.name">
         <nuxt-link :to="article.path" class="article-link">
           <span class="index">{{ index + 1 }}</span>
           <span class="title">{{ article.name }}</span>
-          <span class="seperator" v-if="article.desc">—</span>
-          <span class="desc">{{ article.desc }}</span>
         </nuxt-link>
       </li>
     </ul>
@@ -28,8 +26,6 @@
 declare interface article {
   name: string,
   path: string,
-  desc: string,
-  tag: string
 }
 // 布局
 definePageMeta({
@@ -82,14 +78,6 @@ getArticles()
         text-align: right;
         margin-right: 10px;
         flex-shrink: 0;
-      }
-
-      .desc {
-        margin-left: 10px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        flex: 1;
       }
     }
   }

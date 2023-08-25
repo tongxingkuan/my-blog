@@ -155,3 +155,35 @@ function findK(k, arr) {
 运行结果如下：
 
 :c-image-with-thumbnail{alt=选择排序 src=/img/articles/selectionSort.png}
+
+### 对象如何使用for ... of迭代
+
+```js
+let obj = {
+  a: 1,
+  b: 2
+}
+obj.__proto__[Symbol.iterator] = function* () {
+  for (let k in this) {
+    if (this.hasOwnProperty(k)) {
+      yield [k, this[k]]
+    }
+  }
+}
+
+for (let k of obj) {
+  console.log(k)
+}
+// ['a', 1]
+// ['b', 2]
+```
+
+### 页面性能测量标准
+
+页面性能的好坏跟用户视觉感受直接相关，分以下三个测量内容：
+
+LCP：largest content paint，最大内容绘制，最大的元素出现在用户视觉范围，一般是图片，可以从优化手段减少资源体积，预加载，服务端渲染等方面入手。
+
+FID: first input delay，首次输入延迟，指用户首次输入到响应输入的时间，即页面的响应速度，可以从优化js代码等方面入手
+
+CLS：cumulative layout shift，累积布局偏移，页面可见元素的偏移量，改进方案：每次都为图像、视频元素设置固定宽高，使用transform，而不是改变元素位置实现动画
