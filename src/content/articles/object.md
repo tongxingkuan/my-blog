@@ -299,6 +299,46 @@ arr.splice(0, 1, 5); // [1]
 arr; // [5, 2, 3, 4]
 ```
 
+##### reduce(fn, initValue)
+
+累积函数
+
+`fn`: 回调函数。由开发者提供 reduce 来回调
+`initValue`: 第一次回调 fn 时会将 initValue 传入到 Function 的第一个参数中
+
+其中 `fn(pre, cur, index, arr)` 参数说明如下：
+
+- `pre`：上一次的结果集
+- `cur`：当前元素
+- `index`：当前元素索引
+- `arr`：当前数组
+
+面试题：实现管道函数
+
+```js
+function pipe(...fns) {
+  return function(input) {
+    return fns.reduce((output, fn) => fn(output), input)
+  }
+}
+
+function addOne(num) {
+  return num + 1
+}
+
+function addTwo(num) {
+  return num + 2
+}
+
+function addThree(num) {
+  return num + 3
+}
+
+let pipeFn = pipe(addOne, addTwo, addThree)
+
+pipeFn(0)  // 6
+```
+
 ### 正则表达式
 
 #### 语法

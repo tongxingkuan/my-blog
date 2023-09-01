@@ -182,8 +182,113 @@ for (let k of obj) {
 
 页面性能的好坏跟用户视觉感受直接相关，分以下三个测量内容：
 
-LCP：largest content paint，最大内容绘制，最大的元素出现在用户视觉范围，一般是图片，可以从优化手段减少资源体积，预加载，服务端渲染等方面入手。
+**LCP**：`largest content paint`，最大内容绘制，最大的元素出现在用户视觉范围，一般是图片，可以从优化手段减少资源体积，预加载，服务端渲染等方面入手
 
-FID: first input delay，首次输入延迟，指用户首次输入到响应输入的时间，即页面的响应速度，可以从优化js代码等方面入手
+**FID**: `first input delay`，首次输入延迟，指用户首次输入到响应输入的时间，即页面的响应速度，可以从优化js代码等方面入手
 
-CLS：cumulative layout shift，累积布局偏移，页面可见元素的偏移量，改进方案：每次都为图像、视频元素设置固定宽高，使用transform，而不是改变元素位置实现动画
+**CLS**：`cumulative layout shift`，累积布局偏移，页面可见元素的偏移量，改进方案：每次都为图像、视频元素设置固定宽高，使用transform，而不是改变元素位置实现动画
+
+### 文件断点续传
+
+1. 将文件分片。通过 `File` 对象的 `slice` 方法。
+2. 上传文件分片。依次传输每个文件分片，并记录当前传输的文件分片索引和总文件大小。
+3. 保存上传进度。每次上传成功后计算并保存进度，可以保存到本地也可以保存到服务端。
+4. 续传。读取上传进度，计算下一个文件分片的起始位置，继续上传剩余的文件分片。
+5. 合并文件分片。在所有文件分片上传完后，服务端恢复文件完整性。
+
+### CSS长宽比容器代码实现
+
+在CSS中 `padding-top` 或 `padding-bottom` 的百分比值是根据容器的width来计算的。如此一来就很好的实现了容器的长宽比。采用这种方法,需要把容器的height设置为0。而容器内容的所有元素都需要采用 `position:absolute` ,不然子元素内容都将被padding挤出容器。
+
+```css
+.aa {
+    position: relative;  /*因为容器所有子元素需要绝对定位*/
+    height: 0;  /*容器高度是由padding来控制，盒模型原理*/
+    width: 100%;
+}
+.aa[data-ratio="16:9"] {
+   padding-top: 56.25%; /* 100%*(9/16)  */
+}
+.aa[data-ratio="4:3"] {
+   padding-top: 75%;
+}
+```
+
+### onpopstate可以监听到一个pushstate的事件吗
+
+`onpopstate` 事件只能监听到浏览器历史记录的前进和后退操作，无法直接监听到 `pushState` 或 `replaceState` 的调用。
+
+可以在调用 `pushState` 或 `replaceState` 之后手动触发 `popstate` 事件，来模拟类似的效果。
+
+```js
+// 监听 popstate 事件
+window.addEventListener('popstate', function(event) {
+  console.log('popstate event triggered');
+});
+
+// 调用 pushState 方法
+window.history.pushState(null, null, '/new-url');
+
+// 手动触发 popstate 事件
+var popStateEvent = new PopStateEvent('popstate', { state: null });
+window.dispatchEvent(popStateEvent);
+```
+
+### 手搓redux
+
+```js
+function createStore(reducer) {
+  let state = {}
+  let subscribers = []
+
+  state = reducer({name: '张三', age: 18}) // 初始化状态
+
+  const getState = () => {
+    return state
+  }
+
+  const dispatch = (action) => {
+    state = reducer(state, action)
+    subscribers.forEach(subscriber => subscriber())
+  }
+
+  const subscribe = (subscriber => subscribers.push(subscriber))
+
+  return {
+    getState,
+    dispatch,
+    subscribe
+  }
+}
+
+const userReducer = (state, action) => {
+  if (!action) return state
+  switch (action.type) {
+    case 'changeName':
+      state.name = action.name
+      return state
+    case 'changeAge':
+      state.age += action.age
+      return state
+    default:
+      return state
+  }
+}
+
+let userStore = createStore(userReducer)
+
+userStore.subscribe(() => {
+  const state = userStore.getState()
+  console.log(state)
+})
+
+userStore.dispatch({
+  type: 'changeName',
+  name: '李四'
+})
+
+userStore.dispatch({
+  type: 'changeAge',
+  age: -8
+})
+```
