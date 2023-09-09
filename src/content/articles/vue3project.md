@@ -27,9 +27,5 @@ npm init vite-app <project-name>
 4. 包管理工具引入
 
 ```cmd
-npm install vue@next
-```
-
-```cmd
-yarn add vue@next
+npm create vue@latest
 ```

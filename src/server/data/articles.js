@@ -83,4 +83,12 @@ export const articles = [
     name: '前端模块化',
     path: '/articles/module',
   },
+  {
+    name: '开发常见问题',
+    path: '/articles/faq',
+  },
+  {
+    name: '设计模式',
+    path: '/articles/designmode',
+  },
 ];

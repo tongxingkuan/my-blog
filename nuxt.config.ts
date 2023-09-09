@@ -32,5 +32,15 @@ export default defineNuxtConfig({
     'element-plus/dist/index.css',
     '@/assets/style/theme.less',
     '@/assets/style/animate.less'
-  ]
+  ],
+   //跨域处理 https://blog.csdn.net/weixin_42888568/article/details/130533216
+   nitro: {
+    devProxy: {
+      "/apiproxy": {
+        target: "",
+        changeOrigin: true,
+        // prependPath: true,
+      },
+    },
+  },
 })
