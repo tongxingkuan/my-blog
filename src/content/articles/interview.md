@@ -101,7 +101,7 @@ function JsonParseToMap(str) {
 1. 通过`git stash`，将自己开发分支的代码保存到暂存区中，恢复本地仓库到修改前的状态
 2. `git checkout master`进入主分支，`git pull`拉取master的最新commits（提交记录）
 3. `git checkout myDev`进入开发分支，通过`git rebase master`将master最新的提交，合并到自己的开发分支上， 保证该分支的历史提交与master相同
-4. `git stash pop`将自己的修改取出；git commit、git push提交到远程开发分支上
+4. `git stash pop`将自己的修改取出；`git commit` `git push`提交到远程开发分支上
 5. 切换到master分支下，然后发起 `git merge myDev` 请求，将分支myDev合并到master分支
 
 ### 寻找数组第K大元素
@@ -140,7 +140,7 @@ function findK(k, arr) {
     maxIndex = i
     for (let j = i + 1; j < len; j++) {
       if (arr[j] > arr[maxIndex]) {
-        maxIndex = j    // 找到最小数的索引
+        maxIndex = j    // 找到最大数的索引
       }
     }
     temp = arr[i]
