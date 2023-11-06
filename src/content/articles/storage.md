@@ -39,12 +39,18 @@ function setCookie(key, value, expdays) {
 ```js
 // 读
 function getCookie(key) {
-  let sIndex = document.cookie.indexOf(key + "=");
-  let eIndex = document.cookie.indexOf(";", sIndex);
-  if (eIndex === -1) {
-    eIndex = document.cookie.length;
+  if (key) {
+    let sIndex = document.cookie.indexOf(key + "=");
+    if (sIndex === -1) {
+      return null
+    }
+    let eIndex = document.cookie.indexOf(";", sIndex);
+    if (eIndex === -1) {
+      eIndex = document.cookie.length;
+    }
+    return document.cookie.substring(sIndex, eIndex);
   }
-  return document.cookie.substring(sIndex, eIndex);
+  return document.cookie
 }
 ```
 

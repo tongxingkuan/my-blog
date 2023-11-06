@@ -91,4 +91,8 @@ export const articles = [
     name: '设计模式',
     path: '/articles/designmode',
   },
+  {
+    name: 'React原理',
+    path: '/articles/react',
+  },
 ];

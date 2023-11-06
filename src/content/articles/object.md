@@ -661,6 +661,11 @@ set.toString();           // '[object Set]'
 set.valueOf();            // Set(3) {'a', 'b', 'c'}
 Object.fromEntries(set);  // set不是可迭代对象
 Array.from(set);          // ['a', 'b', 'c']
+
+
+// 数组去重
+let arr = [1, 1, 1, 2, 3, 2, 2, 2, 2, 2, 3, 33, 2]
+const newArr = [...new Set(arr)]  //  [1, 2, 3, 33]
 ```
 
 可以通过`add`、`delete`添加或移除现有的值。

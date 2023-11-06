@@ -41,6 +41,33 @@ function curry(func) {
 > 不同平台的 patch 的主要逻辑部分是相同的，所以这部分公共的部分托管在 core 这个大目录下。差异化部分只需要通过参数来区别，这里用到了一个函数柯里化的技巧，通过 createPatchFunction 把差异化参数提前固化，这样不用每次调用 patch 的时候都传递 nodeOps 和 modules 了，这种编程技巧也非常值得学习。
 > :c-link{name=原文链接 href=https://ustbhuangyi.github.io/vue-analysis/v2/data-driven/update.html#update target=blank}
 
+```js
+// 函数封装后
+function check(reg, txt) {
+    return reg.test(txt)
+}
+
+// 即使是相同的正则表达式，也需要重新传递一次
+console.log(check(/\d+/g, 'test1')); // true
+console.log(check(/\d+/g, 'testtest')); // false
+console.log(check(/[a-z]+/g, 'test')); // true
+
+// Currying后
+function curryingCheck(reg) {
+    return function (txt) {
+        return reg.test(txt)
+    }
+}
+
+// 正则表达式通过闭包保存了起来
+var hasNumber = curryingCheck(/\d+/g)
+var hasLetter = curryingCheck(/[a-z]+/g)
+
+console.log(hasNumber('test1')); // true
+console.log(hasNumber('testtest'));  // false
+console.log(hasLetter('21212')); // false
+```
+
 2. 提前返回：
 
 提前处理部分任务并返回一个函数用于处理后续的任务，支持异步处理。
@@ -63,16 +90,16 @@ function curry(func) {
 
 ##### 防抖
 
-防抖是指延迟执行回调，如果在此期间事件又被出发，则重新计时
+防抖是指延迟执行回调，如果在此期间事件又被触发，则重新计时
 
 ```js
 function debounce(fn, interval) {
   // 闭包变量
   let timer = null
-  return function() {
+  return function(...args) {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      fn.call(this)
+      fn.apply(this, args)
     }, interval)
   }
 }
@@ -85,13 +112,14 @@ function debounce(fn, interval) {
 ```js
 function throttle(fn, interval) {
   // 闭包变量
-  let flag = false
-  return function() {
-    if (flag) return
-    setTimeout(() => {
-      flag = true
-      fn.call(this)
-    }, interval)
+  let timeout
+  return function(...args) {
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        timeout = null
+        fn.apply(this, args)
+      }, interval)
+    }
   }
 }
 ```

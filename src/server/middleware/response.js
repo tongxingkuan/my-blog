@@ -27,8 +27,7 @@ export default fromNodeMiddleware((req, res, next) => {
           // 判断文件的MD5是否一致，不一致说明文件内容变更
           const isSameFlag = ifNoneMatch === etag;
           console.log(etag, lastModified)
-          // 两者满足其一则使用浏览器缓存
-          // 判断文件是否有改动 ------------Start-------------
+          // 判断文件是否有改动 两者满足其一则使用浏览器缓存
           if (isSameCtime || isSameFlag) {
             res.statusCode = 304;
           } else {
