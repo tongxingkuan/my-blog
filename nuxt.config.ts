@@ -23,7 +23,8 @@ export default defineNuxtConfig({
         'json',
         'cmd',
         'jsx',
-        'tsx'
+        'tsx',
+        '文言'
       ]
     },
   },

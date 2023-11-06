@@ -1,15 +1,15 @@
 <template>
-  <Title>文章</Title>
+  <Title>面试题</Title>
   <div>
-    <ul v-if="articlesRef.length > 0" class="article-list">
+    <ul v-if="questionsRef.length > 0" class="question-list">
       <li
-        v-for="(article, index) in articlesRef"
-        :key="article.name"
-        :title="article.name"
+        v-for="(question, index) in questionsRef"
+        :key="question.name"
+        :title="question.name"
       >
-        <nuxt-link :to="article.path" class="article-link">
+        <nuxt-link :to="question.path" class="question-link">
           <span class="index">{{ index + 1 }}</span>
-          <span class="title">{{ article.name }}</span>
+          <span class="title">{{ question.name }}</span>
         </nuxt-link>
       </li>
     </ul>
@@ -20,51 +20,51 @@
       :page-sizes="[10, 20, 30, 40, 50]"
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalRef"
-      @size-change="getArticles"
-      @current-change="getArticles"
+      @size-change="getQuestions"
+      @current-change="getQuestions"
     >
     </el-pagination>
   </div>
 </template>
-<script setup lang="ts">
+  <script setup lang="ts">
 // 定义结构
-declare interface article {
+declare interface question {
   name: string;
   path: string;
 }
 // 布局
 definePageMeta({
-  layout: "article",
+  layout: "question",
 });
 // 分页相关
-const articlesRef = ref<article[]>([]);
+const questionsRef = ref<question[]>([]);
 const pageNumRef = ref(1);
 const pageSizeRef = ref(10);
 const totalRef = ref(0);
 
 // 获取数据
-const getArticles = () => {
-  $fetch("/api/articles", {
+const getQuestions = () => {
+  $fetch("/api/questions", {
     method: "GET",
     params: {
       pageSize: pageSizeRef.value,
       pageNum: pageNumRef.value,
     },
   }).then((res) => {
-    articlesRef.value = res.articles || [];
+    questionsRef.value = res.questions || [];
     totalRef.value = res.total;
   });
 };
-getArticles();
+getQuestions();
 </script>
-<style lang="less" scoped>
-.article-list {
+  <style lang="less" scoped>
+.question-list {
   padding: 20px;
 
   li {
     width: 100%;
 
-    .article-link {
+    .question-link {
       display: block;
       height: 40px;
       line-height: 40px;

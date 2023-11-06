@@ -26,7 +26,7 @@ const show = () => {
 
 <template>
   <div class="gs-container">
-    全局搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show"></el-input>
+    文章搜索：<el-input v-model="queryStr" class="gs-container-search" @blur="hide" @focus="show" placeholder="输入关键词搜索"></el-input>
     <ContentList :query="query">
       <template #default="{ list }">
         <ul class="gs-container-search-list" v-if="flag && queryStr !== ''">

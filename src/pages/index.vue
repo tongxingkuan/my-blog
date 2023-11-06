@@ -7,7 +7,7 @@
     <div class="home-animate-box">
       <nuxt-link to="articles">文章</nuxt-link>
       <nuxt-link to="demos">演示</nuxt-link>
-      <nuxt-link to="test1">测试1</nuxt-link>
+      <nuxt-link to="questions">面试题</nuxt-link>
       <nuxt-link to="test2">测试2</nuxt-link>
     </div>
   </div>
